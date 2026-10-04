@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SaintAcademy Suporte</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' fill='%23fff' text-anchor='middle' letter-spacing='1'%3ESG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Questrial&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script>
+/* ===== CONFIGURAÇÃO: cole aqui os dados do seu projeto Supabase (Project Settings > API) ===== */
+window.SAINTACADEMY = {
+  SUPABASE_URL: "https://noetdezbrtowyaxqyhsk.supabase.co",
+  SUPABASE_KEY: "sb_publishable_o1CEz4TcUfN2xuJdPIIUsQ_LU2-8htd"
+};
+</script>
+<style>
+/* Layout: biblioteca de tarefas. Busca no topo, módulos por tarefa, opções do módulo, aula com passo a passo em fotos grandes. */
+:root{
+  --bg:#ffffff; --fg:#000000; --ink2:#414142; --ink3:#5b5b60; --line:#aea9b4; --soft:#f4f3f5; --inv-bg:#000000; --inv-fg:#ffffff;
+  --font:"Questrial","Glacial Indifference","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{--bg:#000000;--fg:#ffffff;--ink2:#d9d7dc;--ink3:#aea9b4;--line:#5b5b60;--soft:#141415;--inv-bg:#ffffff;--inv-fg:#000000;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.65;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:0 64px}
+button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.lbl{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink3)}
+h1,h2,h3{font-weight:400;text-wrap:balance;margin:0}
+[hidden]{display:none!important}
+
+header.top{border-bottom:1px solid var(--fg);padding-block:22px 18px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.brand{background:none;border:0;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px}
+.wordmark{font-size:22px;letter-spacing:.42em;text-transform:uppercase;line-height:1}
+.brand .sub{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink3)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nav button{background:none;border:0;padding:6px 8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3)}
+.nav button:hover,.nav button.on{color:var(--fg)}
+.nav .who{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);padding-left:10px;border-left:1px solid var(--line);margin-left:4px}
+
+.btn{border:1px solid var(--fg);background:var(--bg);padding:11px 18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;line-height:1.3;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--fg);color:var(--bg)}
+.btn.solid{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-bg)}
+.btn.solid:hover{opacity:.85}
+.btn.ghost{border-color:var(--line);color:var(--ink2)}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn.sm{padding:6px 10px;font-size:10px}
+
+.crumbs{display:flex;flex-wrap:wrap;gap:8px;padding-block:18px 0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3)}
+.crumbs button{background:none;border:0;padding:0;color:var(--ink3);letter-spacing:inherit;text-transform:inherit;font-size:inherit}
+.crumbs button:hover{color:var(--fg)}
+
+/* Login */
+.auth{min-height:100vh;display:grid;place-items:center;padding:24px 20px}
+.auth form{width:100%;max-width:380px;display:grid;gap:16px}
+.auth .wordmark{font-size:24px;text-align:center}
+.auth .sub{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink3);text-align:center;margin-top:-6px}
+.auth .rule{margin:6px auto 10px}
+.err{font-size:13px;color:var(--fg);border:1px solid var(--fg);padding:10px 12px}
+.ok{font-size:13px;color:var(--ink2);border:1px dashed var(--line);padding:10px 12px}
+
+/* Busca e início */
+.hero{padding-block:44px 30px}
+.hero h1{font-size:clamp(26px,4.6vw,42px);letter-spacing:.04em;line-height:1.2;max-width:22ch}
+.searchbox{margin-top:24px;display:flex;align-items:center;border:1px solid var(--fg);background:var(--bg)}
+.searchbox svg{flex:none;margin-left:16px}
+.searchbox input{flex:1;min-width:0;border:0;background:transparent;padding:16px 14px;font-size:18px;outline:none}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;padding-block:8px 0}
+.mod{border:1px solid var(--fg);background:var(--bg);text-align:left;padding:22px 20px 18px;display:flex;flex-direction:column;gap:10px;min-height:150px;transition:background .15s,color .15s}
+.mod:hover{background:var(--fg);color:var(--bg)}
+.mod:hover .lbl,.mod:hover .mm{color:var(--bg)}
+.mod .t{font-size:19px;letter-spacing:.16em;text-transform:uppercase;line-height:1.3}
+.mod .d{font-size:14px;color:var(--ink3);line-height:1.5}
+.mod:hover .d{color:var(--bg)}
+.mod .mm{margin-top:auto;display:flex;justify-content:space-between;gap:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+.chip{display:inline-block;border:1px solid currentColor;padding:2px 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.chip.done{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+h2.sec{font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin:34px 0 14px;color:var(--ink2)}
+.empty{border:1px dashed var(--line);padding:28px 24px;color:var(--ink3)}
+.empty b{display:block;color:var(--fg);font-weight:400;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-size:13px}
+
+/* Módulo */
+.mhead{padding-block:34px 24px;border-bottom:1px solid var(--line)}
+.mhead h1{font-size:clamp(28px,5vw,44px);letter-spacing:.14em;text-transform:uppercase;line-height:1.15}
+.mhead p{margin:10px 0 0;color:var(--ink2);max-width:60ch}
+.ask{font-size:13px;letter-spacing:.24em;text-transform:uppercase;margin:28px 0 14px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.opt{border:1px solid var(--fg);background:var(--bg);padding:24px 20px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:17px;letter-spacing:.14em;text-transform:uppercase;transition:background .15s,color .15s}
+.opt:hover{background:var(--fg);color:var(--bg)}
+.opt .arw{font-size:20px;letter-spacing:0}
+.opt .chip{font-size:9px}
+
+/* Aula */
+.lesson{max-width:860px;padding-block:30px}
+.lesson h1{font-size:clamp(26px,4.4vw,40px);letter-spacing:.12em;text-transform:uppercase;line-height:1.2}
+.lesson .sw{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 0}
+.lesson .sw button{border:1px solid var(--line);background:var(--bg);padding:5px 10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.lesson .sw button.cur{border-color:var(--fg);background:var(--fg);color:var(--bg)}
+.rule{height:3px;background:var(--fg);margin:20px 0 24px;width:72px}
+.facts{display:grid;gap:14px;margin-bottom:32px}
+.facts > div{border-left:3px solid var(--fg);padding:2px 0 2px 16px}
+.facts p{margin:4px 0 0;white-space:pre-line;font-size:17px;line-height:1.6}
+.video{display:flex;align-items:center;gap:16px;border:1px solid var(--fg);padding:16px 18px;margin-bottom:30px;text-decoration:none}
+.video:hover{background:var(--soft)}
+.video .pl{width:44px;height:44px;border-radius:50%;background:var(--inv-bg);display:grid;place-items:center;flex:none}
+.video .pl::after{content:"";border-left:13px solid var(--inv-fg);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.part > .lbl{display:block;border-bottom:1px solid var(--fg);padding-bottom:10px;margin-bottom:24px}
+.step{display:grid;grid-template-columns:60px minmax(0,1fr);gap:18px;padding-bottom:34px}
+.step .sn{width:44px;height:44px;border:1px solid var(--fg);display:grid;place-items:center;font-size:16px;font-variant-numeric:tabular-nums}
+.step .tx{font-size:19px;line-height:1.7;white-space:pre-line}
+.step .tx strong{font-weight:400;background:var(--inv-bg);color:var(--inv-fg);padding:0 6px;letter-spacing:.04em}
+.step .tx a{text-decoration:underline;text-underline-offset:3px;word-break:break-all}
+.step figure{margin:16px 0 0}
+.step img{width:100%;display:block;border:1px solid var(--line);cursor:zoom-in;background:var(--soft)}
+.step figcaption{font-size:12px;color:var(--ink3);margin-top:6px;letter-spacing:.06em}
+.attn{border:1px solid var(--fg);padding:20px 22px;margin-bottom:34px}
+.attn ul{margin:10px 0 0;padding-left:18px}
+.attn li{margin-bottom:6px;font-size:17px}
+.done-row{border-top:1px solid var(--fg);padding-top:22px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.note{font-size:13px;color:var(--ink3);margin:0}
+
+/* Gestão */
+.panel{padding-block:30px;display:grid;gap:22px}
+.panel h1{font-size:clamp(24px,4vw,34px);letter-spacing:.14em;text-transform:uppercase}
+.field{display:grid;gap:6px}
+.field input,.field textarea,.field select{border:1px solid var(--line);background:var(--bg);padding:11px 12px;width:100%;font-size:15px}
+.field textarea{min-height:90px;resize:vertical;line-height:1.55}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.box{border:1px solid var(--line);padding:16px;display:grid;gap:10px}
+.box .eh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.box img{max-width:320px;width:100%;border:1px solid var(--line)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.checks label,.tog{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:10px 12px;cursor:pointer;line-height:1.35}
+.checks input,.tog input{width:16px;height:16px;accent-color:var(--fg);margin:0;flex:none}
+.actions{display:flex;flex-wrap:wrap;gap:10px;border-top:1px solid var(--fg);padding-top:18px}
+.hint{font-size:12px;color:var(--ink3);line-height:1.5}
+.tscroll{overflow-x:auto}
+table.list{width:100%;border-collapse:collapse;font-size:14px}
+table.list th,table.list td{border-bottom:1px solid var(--line);padding:12px 8px;text-align:left;vertical-align:top}
+table.list th{font-weight:400;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3)}
+table.list tr.click{cursor:pointer}
+table.list tr.click:hover td{background:var(--soft)}
+.confirm{border:1px solid var(--fg);padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-50%);background:var(--inv-bg);color:var(--inv-fg);padding:11px 18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;z-index:80;max-width:calc(100% - 32px)}
+.zoom{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:90;display:grid;place-items:center;padding:16px;cursor:zoom-out}
+.zoom img{max-width:100%;max-height:100%}
+footer.sg{margin-top:56px;border-top:1px solid var(--line);padding-top:18px;text-align:center;font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--ink3);line-height:1.8}
+.loading{padding:60px 0;color:var(--ink3);letter-spacing:.2em;text-transform:uppercase;font-size:11px}
+
+@media (max-width:760px){
+  .row2{grid-template-columns:1fr}
+  .step{grid-template-columns:1fr;gap:10px}
+  .step .tx{font-size:18px}
+  .nav{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading" style="text-align:center">Carregando SaintAcademy</div></div>
+
+<script>
+(function(){
+"use strict";
+const CFG = window.SAINTACADEMY || {};
+const DOMINIO = "@saintgermain.academy";
+const BUCKET = "academy";
+const app = document.getElementById("app");
+
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const fmtDate = iso => { try{ return new Date(iso).toLocaleDateString("pt-BR"); }catch(e){ return ""; } };
+const normUser = u => String(u||"").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9._-]/g,"");
+const fold = s => String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+function rich(s){
+  // **texto** vira destaque (nome de botão/campo) e links https viram clicáveis
+  let h=esc(s);
+  h=h.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+  h=h.replace(/(https?:\/\/[^\s<]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+  return h;
+}
+function errMsg(e){
+  const m=(e&&(e.message||e.error_description))||String(e||"");
+  if(/Invalid login/i.test(m)) return "Usuário ou senha incorretos.";
+  if(/rate limit/i.test(m)) return "Muitas tentativas. Aguarde alguns minutos e tente de novo.";
+  if(/Password should be/i.test(m)) return "A senha precisa ter pelo menos 6 caracteres.";
+  if(/signups not allowed|Signups not allowed/i.test(m)) return "Cadastro desativado no Supabase. Ative em Authentication > Sign In / Providers > Allow new users to sign up.";
+  if(/Email not confirmed/i.test(m)) return "Usuário ainda não confirmado. Peça a um administrador para recriar o acesso.";
+  return m;
+}
+
+/* ---------- Estado ---------- */
+const S = {
+  sb:null, user:null, perfil:null,
+  modulos:[], aulas:[], acessos:new Set(), feitos:{},
+  urls:{}, view:{name:"home"}, q:"",
+  users:[], userAcessos:{}, userProg:{}, edit:null, confirm:null, busy:false
+};
+const isAdmin = () => !!(S.perfil&&S.perfil.admin);
+const isEditor = () => !!(S.perfil&&S.perfil.editor);
+const modById = id => S.modulos.find(m=>m.id===id);
+const aulaById = id => S.aulas.find(a=>a.id===id);
+const myMods = () => S.modulos.filter(m => isEditor() || (m.publicado && S.acessos.has(m.id))).sort((a,b)=>(a.ordem||0)-(b.ordem||0)||a.nome.localeCompare(b.nome));
+const aulasOf = mid => S.aulas.filter(a=>a.modulo_id===mid && (isEditor()||a.publicado)).sort((a,b)=>(a.ordem||0)-(b.ordem||0)||a.titulo.localeCompare(b.titulo));
+
+/* ---------- Início ---------- */
+async function start(){
+  if(!window.supabase || !CFG.SUPABASE_URL || /COLE_AQUI/.test(CFG.SUPABASE_URL)){
+    app.innerHTML=`<div class="auth"><div style="max-width:440px"><div class="wordmark" style="text-align:center">Saint Germain</div><p class="note" style="text-align:center;margin-top:16px">Configuração pendente: preencha SUPABASE_URL e SUPABASE_KEY no início do arquivo index.html.</p></div></div>`;
+    return;
+  }
+  S.sb = window.__SA_CLIENT__ || window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY, {auth:{persistSession:true,autoRefreshToken:true,storageKey:"saintacademy-auth"}});
+  const { data } = await S.sb.auth.getSession();
+  if(data && data.session){ S.user=data.session.user; await loadAll(); }
+  else await showLogin();
+}
+
+async function showLogin(msg){
+  let instalado=true;
+  try{ const r=await S.sb.rpc("academy_instalado"); instalado = r.error ? true : !!r.data; }catch(e){}
+  if(!instalado) return showSetup();
+  app.innerHTML=`<div class="auth"><form id="fLogin" autocomplete="on">
+    <div class="wordmark">Saint Germain</div><div class="sub">SaintAcademy · Suporte</div><div class="rule"></div>
+    <div class="field"><label class="lbl" for="lu">Usuário</label><input id="lu" autocomplete="username" autocapitalize="none" required></div>
+    <div class="field"><label class="lbl" for="lp">Senha</label><input id="lp" type="password" autocomplete="current-password" required></div>
+    ${msg?`<div class="err">${esc(msg)}</div>`:""}
+    <button class="btn solid" type="submit">Entrar</button>
+    <p class="note" style="text-align:center">Esqueceu a senha? Peça a um administrador para redefinir.</p>
+  </form></div>`;
+  document.getElementById("fLogin").onsubmit=async ev=>{
+    ev.preventDefault();
+    const u=normUser(document.getElementById("lu").value), p=document.getElementById("lp").value;
+    const b=ev.target.querySelector("button"); b.disabled=true; b.textContent="Entrando";
+    const { data, error } = await S.sb.auth.signInWithPassword({email:u+DOMINIO,password:p});
+    if(error) return showLogin(errMsg(error));
+    S.user=data.user; loadAll();
+  };
+}
+
+function showSetup(msg){
+  app.innerHTML=`<div class="auth"><form id="fSetup">
+    <div class="wordmark">Saint Germain</div><div class="sub">Instalação da SaintAcademy</div><div class="rule"></div>
+    <p class="note">Crie a conta da coordenação. Ela será a conta principal, com acesso total.</p>
+    <div class="field"><label class="lbl" for="sc">Código de instalação</label><input id="sc" required autocapitalize="characters"></div>
+    <div class="field"><label class="lbl" for="sn">Seu nome</label><input id="sn" required></div>
+    <div class="field"><label class="lbl" for="su">Usuário</label><input id="su" required autocapitalize="none"></div>
+    <div class="field"><label class="lbl" for="sp">Senha (mínimo 6 caracteres)</label><input id="sp" type="password" minlength="6" required></div>
+    ${msg?`<div class="err">${esc(msg)}</div>`:""}
+    <button class="btn solid" type="submit">Instalar</button>
+  </form></div>`;
+  document.getElementById("fSetup").onsubmit=async ev=>{
+    ev.preventDefault();
+    const code=document.getElementById("sc").value.trim(), nome=document.getElementById("sn").value.trim(), u=normUser(document.getElementById("su").value), p=document.getElementById("sp").value;
+    if(!u) return showSetup("Informe um usuário com letras e números.");
+    const su=await S.sb.auth.signUp({email:u+DOMINIO,password:p});
+    if(su.error) return showSetup(errMsg(su.error));
+    if(!su.data.session){ const si=await S.sb.auth.signInWithPassword({email:u+DOMINIO,password:p}); if(si.error) return showSetup("Desative a confirmação de e-mail no Supabase (Authentication > Sign In / Providers > Email > Confirm email) e tente de novo."); }
+    const r=await S.sb.rpc("academy_instalar",{codigo:code,p_nome:nome,p_usuario:u});
+    if(r.error){ await S.sb.auth.signOut(); return showSetup(errMsg(r.error)); }
+    const s=await S.sb.auth.getSession(); S.user=s.data.session.user; loadAll();
+  };
+}
+
+async function loadAll(){
+  app.innerHTML=`<div class="loading" style="text-align:center">Carregando</div>`;
+  const pr=await S.sb.from("academy_perfis").select("*").eq("id",S.user.id).maybeSingle();
+  if(pr.error || !pr.data || !pr.data.ativo){
+    await S.sb.auth.signOut();
+    return showLogin(pr.data&&!pr.data.ativo?"Seu acesso está desativado. Fale com a coordenação.":"Usuário sem acesso à SaintAcademy. Fale com a coordenação.");
+  }
+  S.perfil=pr.data;
+  const [m,a,ac,pg]=await Promise.all([
+    S.sb.from("academy_modulos").select("*"),
+    S.sb.from("academy_aulas").select("*"),
+    S.sb.from("academy_acessos").select("modulo_id").eq("usuario_id",S.user.id),
+    S.sb.from("academy_progresso").select("aula_id,concluido_em").eq("usuario_id",S.user.id)
+  ]);
+  S.modulos=m.data||[]; S.aulas=a.data||[];
+  S.acessos=new Set((ac.data||[]).map(x=>x.modulo_id));
+  S.feitos={}; (pg.data||[]).forEach(x=>S.feitos[x.aula_id]=x.concluido_em);
+  shell(); go(S.view.name==="home"?{name:"home"}:S.view);
+}
+
+function shell(){
+  app.innerHTML=`<div class="wrap">
+    <header class="top">
+      <button class="brand" type="button" data-go="home" aria-label="Início"><span class="wordmark">Saint Germain</span><span class="sub">SaintAcademy · Suporte</span></button>
+      <nav class="nav" id="nav">
+        <button type="button" data-go="home">Módulos</button>
+        ${isEditor()?`<button type="button" data-go="conteudo">Conteúdo</button>`:""}
+        ${isAdmin()?`<button type="button" data-go="usuarios">Usuários</button>`:""}
+        <button type="button" data-go="conta">Minha conta</button>
+        <span class="who">${esc(S.perfil.nome)}</span>
+      </nav>
+    </header>
+    <nav class="crumbs" id="crumbs" aria-label="Trilha"></nav>
+    <main id="view"></main>
+    <footer class="sg">Saint<br>Germain</footer>
+  </div>`;
+}
+
+/* ---------- Navegação ---------- */
+function go(v){ S.view=v; S.confirm=null; window.scrollTo(0,0); render(); }
+function render(){
+  const v=S.view, el=document.getElementById("view"); if(!el) return;
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",
+    (b.dataset.go==="home"&&["home","modulo","aula","busca"].includes(v.name)) ||
+    (b.dataset.go==="conteudo"&&["conteudo","editModulo","editAula"].includes(v.name)) ||
+    (b.dataset.go==="usuarios"&&["usuarios","editUser"].includes(v.name)) || b.dataset.go===v.name));
+  crumbs();
+  const views={home:homeHTML,busca:homeHTML,modulo:moduloHTML,aula:aulaHTML,conta:contaHTML,usuarios:usuariosHTML,editUser:editUserHTML,conteudo:conteudoHTML,editModulo:editModuloHTML,editAula:editAulaHTML};
+  el.innerHTML=(views[v.name]||homeHTML)();
+  if(v.name==="aula") loadImages((aulaById(v.id)||{}).etapas);
+  if(v.name==="editAula") loadImages(S.edit&&S.edit.etapas);
+  if(v.name==="home"||v.name==="busca"){ const q=document.getElementById("q"); if(q&&S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); } }
+}
+function crumbs(){
+  const v=S.view, c=document.getElementById("crumbs"); if(!c) return;
+  const p=[`<button type="button" data-go="home">Início</button>`];
+  if(v.name==="modulo"){ const m=modById(v.id); p.push(`<span>/</span><span>${esc(m?m.nome:"")}</span>`); }
+  if(v.name==="aula"){ const a=aulaById(v.id), m=a&&modById(a.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-mod="${m.id}">${esc(m.nome)}</button>`); p.push(`<span>/</span><span>${esc(a?a.titulo:"")}</span>`); }
+  if(["conteudo","editModulo","editAula"].includes(v.name)){ p.push(`<span>/</span><button type="button" data-go="conteudo">Conteúdo</button>`);
+    if(v.name==="editAula"&&S.edit){ const m=modById(S.edit.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-editmod="${m.id}">${esc(m.nome)}</button>`); } }
+  if(["usuarios","editUser"].includes(v.name)) p.push(`<span>/</span><button type="button" data-go="usuarios">Usuários</button>`);
+  if(v.name==="conta") p.push(`<span>/</span><span>Minha conta</span>`);
+  c.innerHTML = (v.name==="home"||v.name==="busca") ? "" : p.join(" ");
+}
+
+/* ---------- Telas do colaborador ---------- */
+const LUPA=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>`;
+function homeHTML(){
+  const mods=myMods(), q=fold(S.q.trim());
+  let body;
+  if(q){
+    const mHits=mods.filter(m=>fold(m.nome+" "+m.descricao).includes(q));
+    const aHits=S.aulas.filter(a=>{ const m=modById(a.modulo_id); return m && mods.includes(m) && (isEditor()||a.publicado) &&
+      fold([m.nome,a.titulo,a.objetivo,a.quando,(a.etapas||[]).map(e=>e.texto).join(" ")].join(" ")).includes(q); });
+    body = (mHits.length||aHits.length) ? `
+      ${mHits.length?`<h2 class="sec">Módulos</h2><div class="mods">${mHits.map(modCard).join("")}</div>`:""}
+      ${aHits.length?`<h2 class="sec">Aulas</h2><div class="opts">${aHits.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span><span class="lbl" style="display:block;letter-spacing:.2em">${esc(modById(a.modulo_id).nome)}</span>${esc(a.titulo)}</span><span class="arw">›</span></button>`).join("")}</div>`:""}`
+      : `<div class="empty"><b>Nada encontrado</b>Tente outra palavra, por exemplo acareação, estoque ou estorno.</div>`;
+  } else {
+    body = mods.length ? `<h2 class="sec">Seus módulos</h2><div class="mods">${mods.map(modCard).join("")}</div>`
+      : `<div class="empty"><b>Nenhum módulo liberado</b>Quando a coordenação liberar módulos para você, eles aparecem aqui.</div>`;
+  }
+  return `<section class="hero"><span class="lbl">Olá, ${esc(S.perfil.nome.split(" ")[0])}</span>
+      <h1>O que você precisa fazer agora?</h1>
+      <label class="searchbox">${LUPA}<input id="q" type="search" placeholder="Busque pela tarefa: acareação, furo de estoque, estorno" value="${esc(S.q)}" aria-label="Buscar tarefa"></label>
+    </section>${body}`;
+}
+function modCard(m){
+  const as=aulasOf(m.id), n=as.length, d=as.filter(a=>S.feitos[a.id]).length;
+  return `<button type="button" class="mod" data-mod="${m.id}"><span class="lbl">Módulo</span><span class="t">${esc(m.nome)}</span>
+    ${m.descricao?`<span class="d">${esc(m.descricao)}</span>`:""}
+    <span class="mm"><span>${n} ${n===1?"opção":"opções"}</span>${!m.publicado?`<span class="chip">Rascunho</span>`:(n&&d===n?`<span class="chip done">Aprendido</span>`:"")}</span></button>`;
+}
+function moduloHTML(){
+  const m=modById(S.view.id); if(!m) return `<div class="empty" style="margin-top:24px"><b>Módulo não encontrado</b></div>`;
+  const as=aulasOf(m.id);
+  return `<section class="mhead"><span class="lbl">Módulo${!m.publicado?" · Rascunho":""}</span><h1 style="margin-top:6px">${esc(m.nome)}</h1>${m.descricao?`<p>${esc(m.descricao)}</p>`:""}
+      ${isEditor()?`<div style="margin-top:16px"><button type="button" class="btn sm ghost" data-editmod="${m.id}">Editar módulo</button></div>`:""}</section>
+    ${as.length?`<div class="ask">${esc(m.pergunta||"Selecione uma opção")}</div>
+      <div class="opts">${as.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span>${esc(a.titulo)}${!a.publicado?` <span class="chip">Rascunho</span>`:""}</span><span class="arw">${S.feitos[a.id]?"✓":"›"}</span></button>`).join("")}</div>`
+      :`<div class="empty" style="margin-top:24px"><b>Em construção</b>As opções deste módulo ainda estão sendo preparadas.</div>`}`;
+}
+function aulaHTML(){
+  const a=aulaById(S.view.id); if(!a) return `<div class="empty" style="margin-top:24px"><b>Aula não encontrada</b></div>`;
+  const m=modById(a.modulo_id), sib=aulasOf(a.modulo_id), et=a.etapas||[], at=a.atencao||[];
+  return `<article class="lesson">
+    <span class="lbl">${esc(m?m.nome:"")}${!a.publicado?" · Rascunho":""}</span>
+    <h1 style="margin-top:6px">${esc(a.titulo)}</h1>
+    ${sib.length>1?`<div class="sw">${sib.map(x=>`<button type="button" data-aula="${x.id}" class="${x.id===a.id?"cur":""}">${esc(x.titulo)}</button>`).join("")}</div>`:""}
+    <div class="rule"></div>
+    ${(a.objetivo||a.quando)?`<div class="facts">${a.objetivo?`<div><span class="lbl">Para que serve</span><p>${rich(a.objetivo)}</p></div>`:""}${a.quando?`<div><span class="lbl">Quando fazer</span><p>${rich(a.quando)}</p></div>`:""}</div>`:""}
+    ${a.video?`<a class="video" href="${esc(a.video)}" target="_blank" rel="noopener"><span class="pl" aria-hidden="true"></span><span><span class="lbl" style="display:block">Vídeo explicativo</span>Assistir ao vídeo desta aula</span></a>`:""}
+    <section class="part"><span class="lbl">Passo a passo</span>
+      ${et.length?et.map((e,i)=>`<div class="step"><span class="sn">${pad(i+1)}</span><div style="min-width:0">
+          <div class="tx">${rich(e.texto)}</div>
+          ${e.imagem?`<figure><img data-img="${esc(e.imagem)}" alt="Exemplo da etapa ${i+1}" data-zoom="1"><figcaption>Toque na imagem para ampliar</figcaption></figure>`:""}
+        </div></div>`).join("")
+        :`<div class="empty"><b>Passo a passo em construção</b>Esta aula ainda está sendo preparada pela coordenação.</div>`}
+    </section>
+    ${at.length?`<div class="attn"><span class="lbl">Atenção</span><ul>${at.map(x=>`<li>${rich(x)}</li>`).join("")}</ul></div>`:""}
+    <div class="done-row">
+      <div>${S.feitos[a.id]?`<span class="chip done">Aprendido em ${fmtDate(S.feitos[a.id])}</span>`:`<p class="note">Terminou de aprender? Registre abaixo.</p>`}</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${isEditor()?`<button type="button" class="btn ghost" data-editaula="${a.id}">Editar aula</button>`:""}
+        ${S.feitos[a.id]?`<button type="button" class="btn ghost" data-undone="${a.id}">Desmarcar</button>`:`<button type="button" class="btn solid" data-done="${a.id}">Aprendi esta tarefa</button>`}
+        <button type="button" class="btn" data-mod="${a.modulo_id}">Voltar ao módulo</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+async function loadImages(etapas){
+  const need=(etapas||[]).map(e=>e.imagem).filter(p=>p && !S.urls[p]);
+  if(need.length){
+    const r=await S.sb.storage.from(BUCKET).createSignedUrls(need,60*60*6);
+    (r.data||[]).forEach(x=>{ if(x.signedUrl) S.urls[x.path]=x.signedUrl; });
+  }
+  document.querySelectorAll("img[data-img]").forEach(img=>{ const u=S.urls[img.dataset.img]; if(u&&img.src!==u) img.src=u; });
+}
+
+/* ---------- Minha conta ---------- */
+function contaHTML(){
+  return `<section class="panel" style="max-width:520px"><div><span class="lbl">Minha conta</span><h1 style="margin-top:6px">${esc(S.perfil.nome)}</h1><p class="note" style="margin-top:6px">Usuário: ${esc(S.perfil.usuario)}${S.perfil.admin?" · Administrador":""}${S.perfil.editor?" · Editor de conteúdo":""}</p></div>
+    <form id="fSenha" class="panel" style="padding:0">
+      <div class="field"><label class="lbl" for="np">Nova senha</label><input id="np" type="password" minlength="6" required autocomplete="new-password"></div>
+      <div class="field"><label class="lbl" for="np2">Repita a nova senha</label><input id="np2" type="password" minlength="6" required autocomplete="new-password"></div>
+      <div class="actions"><button class="btn solid" type="submit">Trocar senha</button><button class="btn ghost" type="button" data-sair="1">Sair da SaintAcademy</button></div>
+    </form></section>`;
+}
+
+/* ---------- Usuários (administradores) ---------- */
+async function loadUsers(){
+  const [u,a,p]=await Promise.all([
+    S.sb.from("academy_perfis").select("*").order("nome"),
+    S.sb.from("academy_acessos").select("*"),
+    S.sb.from("academy_progresso").select("*")
+  ]);
+  S.users=u.data||[]; S.userAcessos={}; S.userProg={};
+  (a.data||[]).forEach(x=>{ (S.userAcessos[x.usuario_id]=S.userAcessos[x.usuario_id]||new Set()).add(x.modulo_id); });
+  (p.data||[]).forEach(x=>{ (S.userProg[x.usuario_id]=S.userProg[x.usuario_id]||[]).push(x); });
+}
+function usuariosHTML(){
+  const mods=S.modulos.slice().sort((a,b)=>(a.ordem||0)-(b.ordem||0));
+  return `<section class="panel"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end">
+      <div><span class="lbl">Administração</span><h1 style="margin-top:6px">Usuários</h1></div>
+      <button type="button" class="btn solid" data-newuser="1">Criar usuário</button></div>
+    ${S.users.length?`<div class="tscroll"><table class="list"><thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Módulos liberados</th><th>Aprendidas</th></tr></thead><tbody>
+      ${S.users.map(u=>{ const ac=S.userAcessos[u.id]||new Set(); const nomes=mods.filter(m=>ac.has(m.id)).map(m=>esc(m.nome));
+        return `<tr class="click" data-user="${u.id}"><td>${esc(u.nome)}${!u.ativo?` <span class="chip">Desativado</span>`:""}</td><td>${esc(u.usuario)}</td>
+        <td>${u.coordenacao?"Coordenação":[u.admin?"Admin":"",u.editor?"Editor":""].filter(Boolean).join(" · ")||"Colaborador"}</td>
+        <td><span class="note">${(u.editor?["Todos (editor)"]:nomes).join(" · ")||"Nenhum"}</span></td><td>${(S.userProg[u.id]||[]).length}</td></tr>`;}).join("")}
+    </tbody></table></div>`:`<div class="empty"><b>Carregando usuários</b></div>`}
+  </section>`;
+}
+function editUserHTML(){
+  const e=S.edit, isNew=!e.id, mods=S.modulos.slice().sort((a,b)=>(a.ordem||0)-(b.ordem||0));
+  const prot=e.coordenacao && e.id!==S.user.id;
+  const prog=(S.userProg[e.id]||[]).map(p=>{ const a=aulaById(p.aula_id), m=a&&modById(a.modulo_id); return a?`${esc(m?m.nome:"")} › ${esc(a.titulo)} (${fmtDate(p.concluido_em)})`:""; }).filter(Boolean);
+  return `<form class="panel" id="fUser" style="max-width:860px" autocomplete="off">
+    <div><span class="lbl">${isNew?"Criar usuário":"Editar usuário"}</span><h1 style="margin-top:6px">${esc(isNew?"Novo usuário":e.nome)}</h1>
+      ${prot?`<p class="note" style="margin-top:6px">Conta da coordenação. Somente a própria coordenação altera esta conta.</p>`:""}</div>
+    <div class="row2">
+      <div class="field"><label class="lbl" for="un">Nome completo</label><input id="un" value="${esc(e.nome||"")}" required ${prot?"disabled":""}></div>
+      <div class="field"><label class="lbl" for="uu">Usuário de acesso</label><input id="uu" value="${esc(e.usuario||"")}" ${isNew?"required":"disabled"} autocapitalize="none" placeholder="ex.: ana.souza"><span class="hint">Letras minúsculas, números, ponto ou hífen. Não pode ser alterado depois.</span></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label class="lbl" for="up">${isNew?"Senha inicial":"Nova senha (deixe vazio para manter)"}</label><input id="up" type="text" minlength="6" ${isNew?"required":""} ${prot?"disabled":""} autocomplete="new-password"><span class="hint">Mínimo 6 caracteres. Entregue ao colaborador e oriente a trocar em Minha conta.</span></div>
+      <div class="field"><span class="lbl">Perfil</span>
+        <label class="tog"><input type="checkbox" id="ua" ${e.admin?"checked":""} ${prot?"disabled":""}> Administrador: cria usuários e libera acessos</label>
+        <label class="tog"><input type="checkbox" id="ue" ${e.editor?"checked":""} ${prot?"disabled":""}> Editor: cria e edita módulos e aulas</label>
+        ${!isNew?`<label class="tog"><input type="checkbox" id="uat" ${e.ativo?"checked":""} ${prot?"disabled":""}> Acesso ativo</label>`:""}
+      </div>
+    </div>
+    <div class="field"><span class="lbl">Módulos liberados</span>
+      ${mods.length?`<div class="checks">${mods.map(m=>`<label><input type="checkbox" data-acc="${m.id}" ${e.acessos.has(m.id)?"checked":""} ${prot?"disabled":""}> ${esc(m.nome)}${!m.publicado?" (rascunho)":""}</label>`).join("")}</div>`:`<p class="note">Nenhum módulo cadastrado ainda.</p>`}
+      <span class="hint">O colaborador só enxerga e só consegue abrir os módulos marcados. Editores veem todos.</span></div>
+    ${!isNew?`<div class="field"><span class="lbl">Tarefas aprendidas</span><p class="note">${prog.join("<br>")||"Nenhuma ainda."}</p></div>`:""}
+    <div class="actions">${prot?"":`<button type="submit" class="btn solid">${isNew?"Criar usuário":"Salvar alterações"}</button>`}<button type="button" class="btn ghost" data-go="usuarios">Voltar</button></div>
+  </form>`;
+}
+async function saveUser(){
+  const e=S.edit, isNew=!e.id; if(S.busy) return;
+  const nome=document.getElementById("un").value.trim(), senha=document.getElementById("up").value;
+  const admin=document.getElementById("ua").checked, editor=document.getElementById("ue").checked;
+  const ativo=isNew?true:document.getElementById("uat").checked;
+  const sel=[...document.querySelectorAll("[data-acc]")].filter(x=>x.checked).map(x=>x.dataset.acc);
+  if(!nome) return toast("Informe o nome");
+  if(senha && senha.length<6) return toast("A senha precisa ter pelo menos 6 caracteres");
+  S.busy=true;
+  try{
+    if(isNew){
+      const usuario=normUser(document.getElementById("uu").value);
+      if(!usuario) throw new Error("Informe o usuário de acesso");
+      const ex=await S.sb.rpc("academy_usuario_existe",{p_usuario:usuario});
+      if(ex.error) throw ex.error; if(ex.data) throw new Error("Este usuário já existe. Escolha outro.");
+      const tmp=window.__SA_TMP__ ? window.__SA_TMP__() : window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,storageKey:"saintacademy-tmp"}});
+      const su=await tmp.auth.signUp({email:usuario+DOMINIO,password:senha});
+      if(su.error) throw su.error;
+      if(!su.data.user || (su.data.user.identities && su.data.user.identities.length===0)) throw new Error("Este usuário já existe. Escolha outro.");
+      try{ await tmp.auth.signOut(); }catch(_){}
+      const r=await S.sb.rpc("academy_registrar_usuario",{p_id:su.data.user.id,p_nome:nome,p_usuario:usuario,p_admin:admin,p_editor:editor,p_modulos:sel});
+      if(r.error) throw r.error;
+      toast("Usuário criado");
+    } else {
+      const u=await S.sb.from("academy_perfis").update({nome,admin,editor,ativo}).eq("id",e.id); if(u.error) throw u.error;
+      const add=sel.filter(id=>!e.acessos.has(id)), rem=[...e.acessos].filter(id=>!sel.includes(id));
+      if(add.length){ const r=await S.sb.from("academy_acessos").insert(add.map(id=>({usuario_id:e.id,modulo_id:id}))); if(r.error) throw r.error; }
+      if(rem.length){ const r=await S.sb.from("academy_acessos").delete().eq("usuario_id",e.id).in("modulo_id",rem); if(r.error) throw r.error; }
+      if(senha){ const r=await S.sb.rpc("academy_trocar_senha",{p_id:e.id,p_senha:senha}); if(r.error) throw r.error; }
+      if(e.id===S.user.id){ S.perfil=Object.assign({},S.perfil,{nome,admin,editor}); S.acessos=new Set(sel); shell(); }
+      toast("Alterações salvas");
+    }
+    await loadUsers(); go({name:"usuarios"});
+  }catch(err){ toast(errMsg(err)); }
+  S.busy=false;
+}
+
+/* ---------- Conteúdo (editores) ---------- */
+function conteudoHTML(){
+  const mods=S.modulos.slice().sort((a,b)=>(a.ordem||0)-(b.ordem||0)||a.nome.localeCompare(b.nome));
+  return `<section class="panel"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end">
+      <div><span class="lbl">Conteúdo</span><h1 style="margin-top:6px">Módulos e aulas</h1><p class="note" style="margin-top:6px">Cada módulo é uma tarefa. Dentro dele ficam as opções, por exemplo cada transportadora.</p></div>
+      <button type="button" class="btn solid" data-newmod="1">Criar módulo</button></div>
+    ${mods.length?`<div class="tscroll"><table class="list"><thead><tr><th>Ordem</th><th>Módulo</th><th>Opções</th><th>Status</th></tr></thead><tbody>
+      ${mods.map(m=>{ const as=S.aulas.filter(a=>a.modulo_id===m.id); const pub=as.filter(a=>a.publicado).length;
+        return `<tr class="click" data-editmod="${m.id}"><td>${pad(m.ordem||0)}</td><td>${esc(m.nome)}</td><td>${as.length} (${pub} publicadas)</td><td>${m.publicado?"Publicado":"Rascunho"}</td></tr>`;}).join("")}
+    </tbody></table></div>`:`<div class="empty"><b>Nenhum módulo ainda</b>Crie o primeiro módulo, por exemplo Acareação.</div>`}
+  </section>`;
+}
+function editModuloHTML(){
+  const e=S.edit, as=e.id?S.aulas.filter(a=>a.modulo_id===e.id).sort((a,b)=>(a.ordem||0)-(b.ordem||0)):[];
+  return `<form class="panel" id="fMod" style="max-width:860px" autocomplete="off">
+    <div><span class="lbl">${e.id?"Editar módulo":"Criar módulo"}</span><h1 style="margin-top:6px">${esc(e.nome||"Novo módulo")}</h1></div>
+    <div class="row2">
+      <div class="field"><label class="lbl" for="mn">Nome do módulo (nome da tarefa)</label><input id="mn" value="${esc(e.nome||"")}" required placeholder="Ex.: Acareação"></div>
+      <div class="field"><label class="lbl" for="mo">Ordem</label><input id="mo" inputmode="numeric" value="${esc(e.ordem||"")}"></div>
+    </div>
+    <div class="field"><label class="lbl" for="md">Descrição curta</label><input id="md" value="${esc(e.descricao||"")}" placeholder="Ex.: Como abrir uma acareação com cada transportadora."></div>
+    <div class="field"><label class="lbl" for="mq">Frase para escolher a opção</label><input id="mq" value="${esc(e.pergunta||"Selecione uma opção")}" placeholder="Ex.: Selecione a transportadora"></div>
+    <label class="tog"><input type="checkbox" id="mp" ${e.publicado?"checked":""}> Publicado: aparece para quem tem este módulo liberado</label>
+    ${e.id?`<div class="field"><span class="lbl">Opções deste módulo</span>
+      ${as.length?`<div class="tscroll"><table class="list"><tbody>${as.map(a=>`<tr class="click" data-editaula="${a.id}"><td style="width:60px">${pad(a.ordem||0)}</td><td>${esc(a.titulo)}</td><td>${(a.etapas||[]).length} etapas</td><td>${a.publicado?"Publicada":"Rascunho"}</td></tr>`).join("")}</tbody></table></div>`:`<p class="note">Nenhuma opção ainda.</p>`}
+      <button type="button" class="btn" data-newaula="${e.id}" style="justify-self:start">Criar opção (aula)</button></div>`:`<p class="note">Salve o módulo para criar as opções dentro dele.</p>`}
+    ${S.confirm==="mod"?`<div class="confirm"><span>Excluir este módulo e todas as aulas dele? Esta ação não pode ser desfeita.</span><button type="button" class="btn solid sm" data-delmodyes="1">Sim, excluir</button><button type="button" class="btn sm ghost" data-nodel="1">Cancelar</button></div>`:""}
+    <div class="actions"><button type="submit" class="btn solid">Salvar módulo</button><button type="button" class="btn ghost" data-go="conteudo">Voltar</button>
+      ${e.id?`<button type="button" class="btn ghost" data-mod="${e.id}">Ver como colaborador</button><button type="button" class="btn ghost" data-delmod="1" style="margin-left:auto">Excluir módulo</button>`:""}</div>
+  </form>`;
+}
+async function saveModulo(){
+  const e=S.edit; if(S.busy) return;
+  const body={nome:document.getElementById("mn").value.trim(),descricao:document.getElementById("md").value.trim(),pergunta:document.getElementById("mq").value.trim()||"Selecione uma opção",
+    ordem:parseInt(document.getElementById("mo").value,10)||0,publicado:document.getElementById("mp").checked,atualizado:new Date().toISOString()};
+  if(!body.nome) return toast("Informe o nome do módulo");
+  S.busy=true;
+  const r = e.id ? await S.sb.from("academy_modulos").update(body).eq("id",e.id).select().single()
+                 : await S.sb.from("academy_modulos").insert(body).select().single();
+  S.busy=false;
+  if(r.error) return toast(errMsg(r.error));
+  const i=S.modulos.findIndex(m=>m.id===r.data.id); if(i>=0) S.modulos[i]=r.data; else S.modulos.push(r.data);
+  toast("Módulo salvo"); S.edit=Object.assign({},r.data); go({name:"editModulo",id:r.data.id});
+}
+
+function blankStep(){ return {texto:"",imagem:null}; }
+function editAulaHTML(){
+  const e=S.edit, m=modById(e.modulo_id);
+  return `<form class="panel" id="fAula" style="max-width:900px" autocomplete="off">
+    <div><span class="lbl">${esc(m?m.nome:"")} · ${e.id?"Editar aula":"Nova aula"}</span><h1 style="margin-top:6px">${esc(e.titulo||"Nova opção")}</h1></div>
+    <div class="row2">
+      <div class="field"><label class="lbl" for="at">Nome da opção (botão)</label><input id="at" data-f="titulo" value="${esc(e.titulo||"")}" required placeholder="Ex.: Estoca"></div>
+      <div class="field"><label class="lbl" for="ao">Ordem</label><input id="ao" data-f="ordem" inputmode="numeric" value="${esc(e.ordem||"")}"></div>
+    </div>
+    <div class="field"><label class="lbl" for="aob">Para que serve</label><textarea id="aob" data-f="objetivo">${esc(e.objetivo||"")}</textarea></div>
+    <div class="field"><label class="lbl" for="aq">Quando fazer</label><textarea id="aq" data-f="quando">${esc(e.quando||"")}</textarea></div>
+    <div class="field"><label class="lbl" for="av">Link do vídeo (opcional)</label><input id="av" data-f="video" value="${esc(e.video||"")}" placeholder="https://"></div>
+    <div class="field"><span class="lbl">Passo a passo</span>
+      <p class="hint">Escreva como quem ensina do zero: onde entrar, qual link abrir, onde clicar. Use **duas estrelas** em volta do nome de um botão ou campo para destacá-lo, por exemplo: Clique em **Salvar**. Links que começam com https viram clicáveis.</p>
+      ${e.etapas.map((s,i)=>`<div class="box">
+        <div class="eh"><span class="lbl">Etapa ${pad(i+1)}</span><span style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" class="btn sm ghost" data-up="${i}" ${i===0?"disabled":""}>Subir</button>
+          <button type="button" class="btn sm ghost" data-down="${i}" ${i===e.etapas.length-1?"disabled":""}>Descer</button>
+          <button type="button" class="btn sm ghost" data-rmstep="${i}">Remover etapa</button></span></div>
+        <textarea data-steptxt="${i}" aria-label="Texto da etapa ${i+1}" placeholder="Ex.: Abra o Google e acesse https://www.bling.com.br. Informe seu **usuário** e sua **senha** e clique em **Entrar**.">${esc(s.texto)}</textarea>
+        ${s.imagem?`<img data-img="${esc(s.imagem)}" alt="Imagem da etapa ${i+1}">`:""}
+        <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <label class="btn sm">${s.imagem?"Trocar foto":"Adicionar foto"}<input type="file" accept="image/*" data-stepimg="${i}" hidden></label>
+          ${s.imagem?`<button type="button" class="btn sm ghost" data-rmimg="${i}">Tirar foto</button>`:""}</span>
+      </div>`).join("")}
+      <button type="button" class="btn ghost" data-addstep="1" style="justify-self:start">Adicionar etapa</button>
+    </div>
+    <div class="field"><label class="lbl" for="aa">Atenção (um ponto por linha)</label><textarea id="aa" data-f="atencao">${esc((e.atencao||[]).join("\n"))}</textarea></div>
+    <label class="tog"><input type="checkbox" id="ap" ${e.publicado?"checked":""}> Publicada: aparece para quem tem o módulo liberado</label>
+    ${S.confirm==="aula"?`<div class="confirm"><span>Excluir esta aula? Esta ação não pode ser desfeita.</span><button type="button" class="btn solid sm" data-delaulayes="1">Sim, excluir</button><button type="button" class="btn sm ghost" data-nodel="1">Cancelar</button></div>`:""}
+    <div class="actions"><button type="submit" class="btn solid">Salvar aula</button><button type="button" class="btn ghost" data-editmod="${e.modulo_id}">Voltar ao módulo</button>
+      ${e.id?`<button type="button" class="btn ghost" data-aula="${e.id}">Ver como colaborador</button><button type="button" class="btn ghost" data-delaula="1" style="margin-left:auto">Excluir aula</button>`:""}</div>
+  </form>`;
+}
+function syncAula(){
+  const e=S.edit; if(!e||S.view.name!=="editAula") return;
+  document.querySelectorAll("#fAula [data-f]").forEach(el=>{ const f=el.dataset.f;
+    if(f==="atencao") e.atencao=el.value.split("\n").map(x=>x.trim()).filter(Boolean);
+    else if(f==="ordem") e.ordem=parseInt(el.value,10)||0; else e[f]=el.value; });
+  document.querySelectorAll("[data-steptxt]").forEach(el=>{ const s=e.etapas[+el.dataset.steptxt]; if(s) s.texto=el.value; });
+  const p=document.getElementById("ap"); if(p) e.publicado=p.checked;
+}
+async function saveAula(){
+  syncAula(); const e=S.edit; if(S.busy) return;
+  if(!(e.titulo||"").trim()) return toast("Informe o nome da opção");
+  if(e.video && !/^https?:\/\//i.test(e.video.trim())) return toast("O link do vídeo precisa começar com https://");
+  const body={modulo_id:e.modulo_id,titulo:e.titulo.trim(),ordem:e.ordem||0,objetivo:(e.objetivo||"").trim(),quando:(e.quando||"").trim(),video:(e.video||"").trim(),
+    etapas:e.etapas.filter(s=>(s.texto||"").trim()||s.imagem).map(s=>({texto:(s.texto||"").trim(),imagem:s.imagem||null})),
+    atencao:e.atencao||[],publicado:!!e.publicado,atualizado:new Date().toISOString()};
+  S.busy=true;
+  const r = e.id ? await S.sb.from("academy_aulas").update(body).eq("id",e.id).select().single()
+                 : await S.sb.from("academy_aulas").insert(body).select().single();
+  S.busy=false;
+  if(r.error) return toast(errMsg(r.error));
+  const i=S.aulas.findIndex(a=>a.id===r.data.id); if(i>=0) S.aulas[i]=r.data; else S.aulas.push(r.data);
+  toast("Aula salva"); go({name:"aula",id:r.data.id});
+}
+function compress(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader(); r.onerror=rej;
+    r.onload=()=>{ const im=new Image(); im.onerror=rej; im.onload=()=>{
+      let w=im.width,h=im.height; const max=2000; if(w>max){h=Math.round(h*max/w);w=max;}
+      const c=document.createElement("canvas"); c.width=w;c.height=h; const x=c.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,w,h); x.drawImage(im,0,0,w,h);
+      c.toBlob(b=>b?res(b):rej(new Error("Falha ao processar a imagem")),"image/jpeg",.9); }; im.src=r.result; };
+    r.readAsDataURL(file);
+  });
+}
+function openAulaEditor(id, moduloId){
+  const a=id?aulaById(id):null;
+  S.edit = a ? JSON.parse(JSON.stringify(a)) : {id:null,modulo_id:moduloId,titulo:"",ordem:S.aulas.filter(x=>x.modulo_id===moduloId).length+1,objetivo:"",quando:"",video:"",etapas:[blankStep()],atencao:[],publicado:false};
+  if(!S.edit.etapas||!S.edit.etapas.length) S.edit.etapas=[blankStep()];
+  go({name:"editAula",id:id||null});
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click",async ev=>{
+  const z=ev.target.closest(".zoom"); if(z){ z.remove(); return; }
+  const t=ev.target.closest("button,[data-zoom],tr.click"); if(!t) return;
+  const d=t.dataset;
+  if(d.zoom&&t.src){ const o=document.createElement("div"); o.className="zoom"; const im=document.createElement("img"); im.src=t.src; im.alt=t.alt||""; o.appendChild(im); document.body.appendChild(o); return; }
+  if(d.go){ if(d.go==="home"){ S.q=""; }
+    if(d.go==="usuarios"){ go({name:"usuarios"}); await loadUsers(); return render(); }
+    return go({name:d.go}); }
+  if(d.mod) return go({name:"modulo",id:d.mod});
+  if(d.aula) return go({name:"aula",id:d.aula});
+  if(d.done||d.undone){
+    const id=d.done||d.undone;
+    if(d.done){ const r=await S.sb.from("academy_progresso").insert({usuario_id:S.user.id,aula_id:id}); if(r.error&&!/duplicate/i.test(r.error.message)) return toast(errMsg(r.error)); S.feitos[id]=new Date().toISOString(); toast("Registrado"); }
+    else { const r=await S.sb.from("academy_progresso").delete().eq("usuario_id",S.user.id).eq("aula_id",id); if(r.error) return toast(errMsg(r.error)); delete S.feitos[id]; }
+    return render(); }
+  if(d.sair){ await S.sb.auth.signOut(); location.reload(); return; }
+  if(d.newuser){ S.edit={id:null,nome:"",usuario:"",admin:false,editor:false,ativo:true,acessos:new Set()}; return go({name:"editUser"}); }
+  if(d.user){ const u=S.users.find(x=>x.id===d.user); S.edit=Object.assign({},u,{acessos:new Set(S.userAcessos[u.id]||[])}); return go({name:"editUser"}); }
+  if(d.newmod){ S.edit={id:null,nome:"",descricao:"",pergunta:"Selecione uma opção",ordem:S.modulos.length+1,publicado:false}; return go({name:"editModulo"}); }
+  if(d.editmod){ S.edit=Object.assign({},modById(d.editmod)); return go({name:"editModulo",id:d.editmod}); }
+  if(d.newaula) return openAulaEditor(null,d.newaula);
+  if(d.editaula) return openAulaEditor(d.editaula);
+  if(d.nodel){ syncAula(); S.confirm=null; return render(); }
+  if(d.delmod){ S.confirm="mod"; return render(); }
+  if(d.delaula){ syncAula(); S.confirm="aula"; return render(); }
+  if(d.delmodyes){ const id=S.edit.id; const r=await S.sb.from("academy_modulos").delete().eq("id",id); if(r.error) return toast(errMsg(r.error));
+    S.modulos=S.modulos.filter(m=>m.id!==id); S.aulas=S.aulas.filter(a=>a.modulo_id!==id); toast("Módulo excluído"); return go({name:"conteudo"}); }
+  if(d.delaulayes){ const id=S.edit.id, mid=S.edit.modulo_id; const r=await S.sb.from("academy_aulas").delete().eq("id",id); if(r.error) return toast(errMsg(r.error));
+    S.aulas=S.aulas.filter(a=>a.id!==id); toast("Aula excluída"); S.edit=Object.assign({},modById(mid)); return go({name:"editModulo",id:mid}); }
+  if(S.view.name==="editAula"){
+    const e=S.edit;
+    if(d.addstep){ syncAula(); e.etapas.push(blankStep()); return render(); }
+    if(d.rmstep!==undefined){ syncAula(); e.etapas.splice(+d.rmstep,1); if(!e.etapas.length) e.etapas.push(blankStep()); return render(); }
+    if(d.up!==undefined){ syncAula(); const i=+d.up; [e.etapas[i-1],e.etapas[i]]=[e.etapas[i],e.etapas[i-1]]; return render(); }
+    if(d.down!==undefined){ syncAula(); const i=+d.down; [e.etapas[i+1],e.etapas[i]]=[e.etapas[i],e.etapas[i+1]]; return render(); }
+    if(d.rmimg!==undefined){ syncAula(); e.etapas[+d.rmimg].imagem=null; return render(); }
+  }
+});
+document.addEventListener("input",ev=>{
+  if(ev.target.id==="q"){ S.q=ev.target.value; const v=S.q.trim()?"busca":"home"; S.view={name:v}; render(); }
+});
+document.addEventListener("change",async ev=>{
+  const el=ev.target;
+  if(el.dataset.stepimg!==undefined && el.files && el.files[0]){
+    syncAula(); const i=+el.dataset.stepimg;
+    try{
+      toast("Enviando foto");
+      const blob=await compress(el.files[0]);
+      const path=`aulas/${S.edit.id||"nova"}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.jpg`;
+      const up=await S.sb.storage.from(BUCKET).upload(path,blob,{contentType:"image/jpeg",upsert:false});
+      if(up.error) throw up.error;
+      S.edit.etapas[i].imagem=path; render(); toast("Foto adicionada");
+    }catch(err){ toast("Não foi possível enviar a foto: "+errMsg(err)); }
+  }
+});
+document.addEventListener("submit",async ev=>{
+  ev.preventDefault();
+  const id=ev.target.id;
+  if(id==="fUser") return saveUser();
+  if(id==="fMod") return saveModulo();
+  if(id==="fAula") return saveAula();
+  if(id==="fSenha"){
+    const a=document.getElementById("np").value, b=document.getElementById("np2").value;
+    if(a!==b) return toast("As senhas não conferem");
+    const r=await S.sb.auth.updateUser({password:a}); if(r.error) return toast(errMsg(r.error));
+    ev.target.reset(); toast("Senha alterada");
+  }
+});
+document.addEventListener("keydown",ev=>{ if(ev.key==="Escape"){ const z=document.querySelector(".zoom"); if(z) z.remove(); } });
+
+start();
+})();
+</script>
+</body>
+</html>
