@@ -109,6 +109,12 @@ h2.sec{font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin:34px 
 .video:hover{background:var(--soft)}
 .video .pl{width:44px;height:44px;border-radius:50%;background:var(--inv-bg);display:grid;place-items:center;flex:none}
 .video .pl::after{content:"";border-left:13px solid var(--inv-fg);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.player{margin:0 0 30px}
+.player .frame{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--fg)}
+.player iframe,.player video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.player .cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px}
+.vbox{border:1px solid var(--fg);padding:18px;display:grid;gap:12px}
+.vbox .or{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3)}
 .part > .lbl{display:block;border-bottom:1px solid var(--fg);padding-bottom:10px;margin-bottom:24px}
 .step{display:grid;grid-template-columns:60px minmax(0,1fr);gap:18px;padding-bottom:34px}
 .step .sn{width:44px;height:44px;border:1px solid var(--fg);display:grid;place-items:center;font-size:16px;font-variant-numeric:tabular-nums}
@@ -317,7 +323,8 @@ function render(){
   crumbs();
   const views={home:homeHTML,busca:homeHTML,modulo:moduloHTML,aula:aulaHTML,conta:contaHTML,usuarios:usuariosHTML,editUser:editUserHTML,conteudo:conteudoHTML,editModulo:editModuloHTML,editAula:editAulaHTML};
   el.innerHTML=(views[v.name]||homeHTML)();
-  if(v.name==="aula") loadImages((aulaById(v.id)||{}).etapas);
+  if(v.name==="aula"){ const a=aulaById(v.id)||{}; loadImages(a.etapas); loadVideo(a.video); }
+  if(v.name==="editAula") loadVideo(S.edit&&S.edit.video);
   if(v.name==="editAula") loadImages(S.edit&&S.edit.etapas);
   if(v.name==="home"||v.name==="busca"){ const q=document.getElementById("q"); if(q&&S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); } }
 }
@@ -379,7 +386,7 @@ function aulaHTML(){
     ${sib.length>1?`<div class="sw">${sib.map(x=>`<button type="button" data-aula="${x.id}" class="${x.id===a.id?"cur":""}">${esc(x.titulo)}</button>`).join("")}</div>`:""}
     <div class="rule"></div>
     ${(a.objetivo||a.quando)?`<div class="facts">${a.objetivo?`<div><span class="lbl">Para que serve</span><p>${rich(a.objetivo)}</p></div>`:""}${a.quando?`<div><span class="lbl">Quando fazer</span><p>${rich(a.quando)}</p></div>`:""}</div>`:""}
-    ${a.video?`<a class="video" href="${esc(a.video)}" target="_blank" rel="noopener"><span class="pl" aria-hidden="true"></span><span><span class="lbl" style="display:block">Vídeo explicativo</span>Assistir ao vídeo desta aula</span></a>`:""}
+    ${videoHTML(a.video)}
     <section class="part"><span class="lbl">Passo a passo</span>
       ${et.length?et.map((e,i)=>`<div class="step"><span class="sn">${pad(i+1)}</span><div style="min-width:0">
           <div class="tx">${rich(e.texto)}</div>
@@ -397,6 +404,37 @@ function aulaHTML(){
       </div>
     </div>
   </article>`;
+}
+
+/* ---------- Vídeo: arquivo enviado ou link (YouTube, Google Drive, Vimeo, Loom) ---------- */
+const isStoredVideo = v => !!v && /^videos\//.test(v);
+function embedUrl(url){
+  let u; try{ u=new URL(String(url).trim()); }catch(e){ return null; }
+  const h=u.hostname.replace(/^www\.|^m\./,""), p=u.pathname;
+  let m;
+  if(h==="youtu.be") return "https://www.youtube-nocookie.com/embed/"+p.slice(1).split("/")[0];
+  if(/youtube\.com$/.test(h)){
+    if(u.searchParams.get("v")) return "https://www.youtube-nocookie.com/embed/"+u.searchParams.get("v");
+    if((m=p.match(/^\/(shorts|embed|live)\/([^/?]+)/))) return "https://www.youtube-nocookie.com/embed/"+m[2];
+  }
+  if(/vimeo\.com$/.test(h) && (m=p.match(/(\d{6,})/))) return "https://player.vimeo.com/video/"+m[1];
+  if(h==="drive.google.com" && (m=p.match(/\/file\/d\/([^/]+)/))) return "https://drive.google.com/file/d/"+m[1]+"/preview";
+  if(h==="drive.google.com" && u.searchParams.get("id")) return "https://drive.google.com/file/d/"+u.searchParams.get("id")+"/preview";
+  if(/loom\.com$/.test(h) && (m=p.match(/\/(share|embed)\/([^/?]+)/))) return "https://www.loom.com/embed/"+m[2];
+  return null;
+}
+function videoHTML(v){
+  if(!v) return "";
+  if(isStoredVideo(v)) return `<div class="player"><span class="lbl" style="display:block;margin-bottom:8px">Vídeo explicativo</span><div class="frame"><video data-video="${esc(v)}" controls playsinline preload="metadata"></video></div></div>`;
+  const em=embedUrl(v);
+  if(em) return `<div class="player"><span class="lbl" style="display:block;margin-bottom:8px">Vídeo explicativo</span><div class="frame"><iframe src="${esc(em)}" title="Vídeo explicativo" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="cap"><span class="note">Se o vídeo não carregar, abra pelo link.</span><a class="note" href="${esc(v)}" target="_blank" rel="noopener">Abrir vídeo em nova aba</a></div></div>`;
+  return `<a class="video" href="${esc(v)}" target="_blank" rel="noopener"><span class="pl" aria-hidden="true"></span><span><span class="lbl" style="display:block">Vídeo explicativo</span>Assistir ao vídeo desta aula</span></a>`;
+}
+async function loadVideo(v){
+  if(!isStoredVideo(v)) return;
+  if(!S.urls[v]){ const r=await S.sb.storage.from(BUCKET).createSignedUrl(v,60*60*6); if(r.data&&r.data.signedUrl) S.urls[v]=r.data.signedUrl; }
+  document.querySelectorAll("video[data-video]").forEach(el=>{ const u=S.urls[el.dataset.video]; if(u && el.getAttribute("src")!==u) el.src=u; });
 }
 
 async function loadImages(etapas){
@@ -559,9 +597,17 @@ function editAulaHTML(){
       <div class="field"><label class="lbl" for="at">Nome da opção (botão)</label><input id="at" data-f="titulo" value="${esc(e.titulo||"")}" required placeholder="Ex.: Estoca"></div>
       <div class="field"><label class="lbl" for="ao">Ordem</label><input id="ao" data-f="ordem" inputmode="numeric" value="${esc(e.ordem||"")}"></div>
     </div>
+    <div class="vbox"><span class="lbl">Vídeo explicativo (opcional)</span>
+      ${e.video?`${videoHTML(e.video)}<div><button type="button" class="btn sm ghost" data-rmvideo="1">Tirar vídeo</button></div>`:`<p class="hint" style="margin:0">Esta aula ainda não tem vídeo. Envie um arquivo do seu computador ou cole um link.</p>`}
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <label class="btn solid">${isStoredVideo(e.video)?"Trocar arquivo de vídeo":"Enviar vídeo do computador"}<input type="file" accept="video/*" data-videofile="1" hidden></label>
+        <span class="hint">MP4 ou MOV, até 50 MB. Para vídeos maiores, use o link do YouTube (não listado) ou do Google Drive.</span>
+      </div>
+      <span class="or">ou cole um link</span>
+      <div class="field"><label class="lbl" for="av">Link do vídeo</label><input id="av" data-f="video" value="${esc(isStoredVideo(e.video)?"":(e.video||""))}" placeholder="https://youtu.be/... ou link do Google Drive"><span class="hint">YouTube, Google Drive, Vimeo ou Loom aparecem com o player dentro da aula. No Google Drive, deixe o arquivo como "Qualquer pessoa com o link".</span></div>
+    </div>
     <div class="field"><label class="lbl" for="aob">Para que serve</label><textarea id="aob" data-f="objetivo">${esc(e.objetivo||"")}</textarea></div>
     <div class="field"><label class="lbl" for="aq">Quando fazer</label><textarea id="aq" data-f="quando">${esc(e.quando||"")}</textarea></div>
-    <div class="field"><label class="lbl" for="av">Link do vídeo (opcional)</label><input id="av" data-f="video" value="${esc(e.video||"")}" placeholder="https://"></div>
     <div class="field"><span class="lbl">Passo a passo</span>
       <p class="hint">Escreva como quem ensina do zero: onde entrar, qual link abrir, onde clicar. Use **duas estrelas** em volta do nome de um botão ou campo para destacá-lo, por exemplo: Clique em **Salvar**. Links que começam com https viram clicáveis.</p>
       ${e.etapas.map((s,i)=>`<div class="box">
@@ -588,14 +634,16 @@ function syncAula(){
   const e=S.edit; if(!e||S.view.name!=="editAula") return;
   document.querySelectorAll("#fAula [data-f]").forEach(el=>{ const f=el.dataset.f;
     if(f==="atencao") e.atencao=el.value.split("\n").map(x=>x.trim()).filter(Boolean);
-    else if(f==="ordem") e.ordem=parseInt(el.value,10)||0; else e[f]=el.value; });
+    else if(f==="ordem") e.ordem=parseInt(el.value,10)||0;
+    else if(f==="video"){ if(el.value.trim()) e.video=el.value.trim(); else if(!isStoredVideo(e.video)) e.video=""; }
+    else e[f]=el.value; });
   document.querySelectorAll("[data-steptxt]").forEach(el=>{ const s=e.etapas[+el.dataset.steptxt]; if(s) s.texto=el.value; });
   const p=document.getElementById("ap"); if(p) e.publicado=p.checked;
 }
 async function saveAula(){
   syncAula(); const e=S.edit; if(S.busy) return;
   if(!(e.titulo||"").trim()) return toast("Informe o nome da opção");
-  if(e.video && !/^https?:\/\//i.test(e.video.trim())) return toast("O link do vídeo precisa começar com https://");
+  if(e.video && !isStoredVideo(e.video) && !/^https?:\/\//i.test(e.video.trim())) return toast("O link do vídeo precisa começar com https://");
   const body={modulo_id:e.modulo_id,titulo:e.titulo.trim(),ordem:e.ordem||0,objetivo:(e.objetivo||"").trim(),quando:(e.quando||"").trim(),video:(e.video||"").trim(),
     etapas:e.etapas.filter(s=>(s.texto||"").trim()||s.imagem).map(s=>({texto:(s.texto||"").trim(),imagem:s.imagem||null})),
     atencao:e.atencao||[],publicado:!!e.publicado,atualizado:new Date().toISOString()};
@@ -661,6 +709,7 @@ document.addEventListener("click",async ev=>{
     if(d.up!==undefined){ syncAula(); const i=+d.up; [e.etapas[i-1],e.etapas[i]]=[e.etapas[i],e.etapas[i-1]]; return render(); }
     if(d.down!==undefined){ syncAula(); const i=+d.down; [e.etapas[i+1],e.etapas[i]]=[e.etapas[i],e.etapas[i+1]]; return render(); }
     if(d.rmimg!==undefined){ syncAula(); e.etapas[+d.rmimg].imagem=null; return render(); }
+    if(d.rmvideo){ syncAula(); e.video=""; return render(); }
   }
 });
 document.addEventListener("input",ev=>{
@@ -668,6 +717,19 @@ document.addEventListener("input",ev=>{
 });
 document.addEventListener("change",async ev=>{
   const el=ev.target;
+  if(el.dataset.videofile && el.files && el.files[0]){
+    syncAula(); const f=el.files[0];
+    if(f.size>50*1024*1024){ el.value=""; return toast("Vídeo maior que 50 MB. Use um link do YouTube ou do Google Drive."); }
+    try{
+      toast("Enviando vídeo, aguarde. Não feche a página.");
+      const ext=((f.name.split(".").pop()||"mp4").toLowerCase().replace(/[^a-z0-9]/g,""))||"mp4";
+      const path=`videos/${S.edit.id||"nova"}/${Date.now()}.${ext}`;
+      const up=await S.sb.storage.from(BUCKET).upload(path,f,{contentType:f.type||"video/mp4",upsert:false});
+      if(up.error) throw up.error;
+      S.edit.video=path; render(); toast("Vídeo enviado. Clique em Salvar aula.");
+    }catch(err){ toast("Não foi possível enviar o vídeo: "+errMsg(err)); }
+    return;
+  }
   if(el.dataset.stepimg!==undefined && el.files && el.files[0]){
     syncAula(); const i=+el.dataset.stepimg;
     try{
