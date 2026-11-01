@@ -158,6 +158,18 @@ h2.sec{font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin:34px 
 .step .tx ul.bl li::before{content:"";position:absolute;left:2px;top:.85em;width:12px;height:1px;background:var(--fg)}
 .step .tx strong,.facts strong,.attn strong{font-weight:400;color:var(--fg);border-bottom:1px solid var(--fg);padding-bottom:1px;letter-spacing:.03em}
 .step .tx strong.lead{border:0;padding:0;margin-right:4px;font-size:.8em;letter-spacing:.18em;text-transform:uppercase}
+.org{margin:24px 0 10px;display:flex;flex-direction:column;align-items:center;line-height:1.4}
+.org .ob{border:1px solid var(--fg);background:var(--bg);padding:16px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:260px;max-width:100%}
+.org .ob.lead{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-bg)}
+.org .ob.lead .od{color:var(--line)}
+.org .on{font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+.org .oq{font-size:28px;letter-spacing:.06em;line-height:1;font-variant-numeric:tabular-nums}
+.org .od{font-size:11px;letter-spacing:.06em;color:var(--ink3)}
+.org .ol{display:block;width:1px;height:24px;background:var(--fg)}
+.org .og{width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;border-top:1px solid var(--fg);padding-top:24px}
+.org .og .ob{min-width:0;border-color:var(--line);padding:16px 12px}
+.org .og .oq{font-size:24px}
+.org .ot{margin-top:22px;display:flex;align-items:baseline;gap:14px}
 .step .tx a{text-decoration:underline;text-underline-offset:3px;word-break:break-all}
 .step figure{margin:18px 0 0}
 .step img{width:100%;display:block;border:1px solid var(--line);cursor:zoom-in;background:var(--soft)}
@@ -248,16 +260,30 @@ function richBlock(s){
   const out=[]; let ul=null;
   const flush=()=>{ if(ul){ out.push(`<ul class="bl">${ul.join("")}</ul>`); ul=null; } };
   const lead=h=>h.replace(/^<strong>(.+?)<\/strong>/,'<strong class="lead">$1</strong>');
+  let org=null;
   for(const raw of lines){
     const l=raw.trim(); let m;
+    if(org){ if(/^\[\/organograma\]$/i.test(l)){ flush(); out.push(orgHTML(org)); org=null; } else org.push(l); continue; }
+    if(/^\[organograma\]$/i.test(l)){ flush(); org=[]; continue; }
     if(!l){ flush(); if(out.length && out[out.length-1]!=='<span class="gap"></span>') out.push('<span class="gap"></span>'); continue; }
-    if((m=l.match(/^\*\*([^*]+)\*\*:?$/))){ flush(); out.push(`<h3 class="sh">${esc(m[1])}</h3>`); continue; }
+    if((m=l.match(/^\*\*([^*]+)\*\*:?$/))){ flush(); out.push(`<h3 class="sh">${esc(semNum(m[1]))}</h3>`); continue; }
     if((m=l.match(/^[•·▪◦–—-]\s+(.*)$/))){ (ul=ul||[]).push(`<li>${lead(rich(m[1]))}</li>`); continue; }
     flush(); out.push(`<p>${lead(rich(l))}</p>`);
   }
+  if(org) out.push(orgHTML(org));
   flush();
   while(out.length && out[out.length-1]==='<span class="gap"></span>') out.pop();
   return out.join("");
+}
+// Organograma: [organograma] Nome · quantidade · detalhe (uma linha por bloco; --- separa a base de setores; "= Total · 28" fecha) [/organograma]
+function orgHTML(rows){
+  const top=[], base=[]; let total=null, sep=false;
+  rows.forEach(r=>{ r=r.trim(); if(!r) return; if(r==="---"){ sep=true; return; }
+    const p=r.replace(/^=\s*/,"").split(" · ").map(x=>x.trim());
+    if(r.startsWith("=")){ total=p; return; }
+    (sep?base:top).push({n:p[0],q:p[1]||"",d:p.slice(2).join(" · ")}); });
+  const box=(x,c)=>`<div class="ob ${c||""}"><span class="on">${esc(x.n)}</span>${x.q?`<span class="oq">${esc(x.q)}</span>`:""}${x.d?`<span class="od">${esc(x.d)}</span>`:""}</div>`;
+  return `<div class="org">${top.map((x,i)=>box(x,i===0?"lead":"")+((i<top.length-1||base.length)?`<span class="ol"></span>`:"")).join("")}${base.length?`<div class="og">${base.map(x=>box(x,"sm")).join("")}</div>`:""}${total?`<div class="ot"><span class="lbl">${esc(total[0])}</span><span class="oq">${esc(total[1]||"")}</span></div>`:""}</div>`;
 }
 const numOf = t => { const m=String(t||"").match(/^\s*(\d+(?:\.\d+)*)\.?\s+/); return m?m[1]:""; };
 const semNum = t => String(t||"").replace(/^\s*\d+(?:\.\d+)*\.?\s+/,"");
@@ -444,7 +470,7 @@ function crumbs(){
   const v=S.view, c=document.getElementById("crumbs"); if(!c) return;
   const p=[`<button type="button" data-go="home">Início</button>`];
   if(v.name==="modulo"){ const m=modById(v.id); p.push(`<span>/</span><span>${esc(m?m.nome:"")}</span>`); }
-  if(v.name==="aula"){ const a=aulaById(v.id), m=a&&modById(a.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-mod="${m.id}">${esc(m.nome)}</button>`); p.push(`<span>/</span><span>${esc(a?a.titulo:"")}</span>`); }
+  if(v.name==="aula"){ const a=aulaById(v.id), m=a&&modById(a.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-mod="${m.id}">${esc(m.nome)}</button>`); p.push(`<span>/</span><span>${esc(a?semNum(a.titulo):"")}</span>`); }
   if(["conteudo","editModulo","editAula"].includes(v.name)){ p.push(`<span>/</span><button type="button" data-go="conteudo">Conteúdo</button>`);
     if(v.name==="editAula"&&S.edit){ const m=modById(S.edit.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-editmod="${m.id}">${esc(m.nome)}</button>`); } }
   if(["usuarios","editUser"].includes(v.name)) p.push(`<span>/</span><button type="button" data-go="usuarios">Usuários</button>`);
@@ -463,7 +489,7 @@ function homeHTML(){
       fold([m.nome,a.titulo,a.objetivo,a.quando,(a.etapas||[]).map(e=>e.texto).join(" ")].join(" ")).includes(q); });
     body = (mHits.length||aHits.length) ? `
       ${mHits.length?`<h2 class="sec">Módulos</h2><div class="mods">${mHits.map(modCard).join("")}</div>`:""}
-      ${aHits.length?`<h2 class="sec">Aulas</h2><div class="opts">${aHits.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span><span class="lbl" style="display:block;letter-spacing:.2em">${esc(modById(a.modulo_id).nome)}</span>${esc(a.titulo)}</span><span class="arw">›</span></button>`).join("")}</div>`:""}`
+      ${aHits.length?`<h2 class="sec">Aulas</h2><div class="opts">${aHits.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span><span class="lbl" style="display:block;letter-spacing:.2em">${esc(modById(a.modulo_id).nome)}</span>${esc(semNum(a.titulo))}</span><span class="arw">›</span></button>`).join("")}</div>`:""}`
       : `<div class="empty"><b>Nada encontrado</b>Tente outra palavra, por exemplo acareação, estoque ou estorno.</div>`;
   } else {
     body = mods.length ? `<h2 class="sec">Seus módulos</h2><div class="mods">${mods.map(modCard).join("")}</div>`
@@ -486,7 +512,7 @@ function moduloHTML(){
   return `<section class="mhead"><span class="lbl">Módulo${!m.publicado?" · Rascunho":""}</span><h1 style="margin-top:6px">${esc(m.nome)}</h1>${m.descricao?`<p>${esc(m.descricao)}</p>`:""}
       ${isEditor()?`<div style="margin-top:16px"><button type="button" class="btn sm ghost" data-editmod="${m.id}">Editar módulo</button></div>`:""}</section>
     ${as.length?`<div class="ask">${esc(m.pergunta||"Selecione uma opção")}</div>
-      <div class="opts">${as.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span>${esc(a.titulo)}${!a.publicado?` <span class="chip">Rascunho</span>`:""}</span><span class="arw">${S.feitos[a.id]?"✓":"›"}</span></button>`).join("")}</div>`
+      <div class="opts">${as.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span>${esc(semNum(a.titulo))}${!a.publicado?` <span class="chip">Rascunho</span>`:""}</span><span class="arw">${S.feitos[a.id]?"✓":"›"}</span></button>`).join("")}</div>`
       :`<div class="empty" style="margin-top:24px"><b>Em construção</b>As opções deste módulo ainda estão sendo preparadas.</div>`}`;
 }
 function aulaHTML(){
@@ -494,17 +520,17 @@ function aulaHTML(){
   const m=modById(a.modulo_id), sib=aulasOf(a.modulo_id), et=a.etapas||[], at=a.atencao||[];
   const ix=sib.findIndex(x=>x.id===a.id), tot=sib.length, prev=sib[ix-1], next=sib[ix+1], num=numOf(a.titulo);
   const lnav = tot>1 ? `<nav class="lnav" aria-label="Aulas do módulo">
-      <div class="track">${sib.map(x=>`<button type="button" data-aula="${x.id}" class="seg${x.id===a.id?" cur":""}${S.feitos[x.id]?" ok":""}" title="${esc(x.titulo)}" aria-label="${esc(x.titulo)}"></button>`).join("")}</div>
+      <div class="track">${sib.map(x=>`<button type="button" data-aula="${x.id}" class="seg${x.id===a.id?" cur":""}${S.feitos[x.id]?" ok":""}" title="${esc(semNum(x.titulo))}" aria-label="${esc(semNum(x.titulo))}"></button>`).join("")}</div>
       <div class="lbar">
         <button type="button" class="lnk" ${prev?`data-aula="${prev.id}"`:"disabled"}>‹ <span class="hide-sm">Anterior</span></button>
         <button type="button" class="lnk idxb" data-idx="1" aria-expanded="${S.idx?"true":"false"}">${pad(ix+1)} / ${pad(tot)} <span class="hide-sm">· Todas as aulas</span><span class="car">${S.idx?"−":"+"}</span></button>
         <button type="button" class="lnk" ${next?`data-aula="${next.id}"`:"disabled"}><span class="hide-sm">Próxima</span> ›</button>
       </div>
-      ${S.idx?`<ol class="lidx">${sib.map((x,i)=>`<li><button type="button" data-aula="${x.id}" class="${x.id===a.id?"cur":""}"><span class="n">${esc(numOf(x.titulo)||pad(i+1))}</span><span class="t">${esc(semNum(x.titulo))}</span><span class="s">${S.feitos[x.id]?"✓":""}</span></button></li>`).join("")}</ol>`:""}
+      ${S.idx?`<ol class="lidx">${sib.map((x,i)=>`<li><button type="button" data-aula="${x.id}" class="${x.id===a.id?"cur":""}"><span class="n">${pad(i+1)}</span><span class="t">${esc(semNum(x.titulo))}</span><span class="s">${S.feitos[x.id]?"✓":""}</span></button></li>`).join("")}</ol>`:""}
     </nav>` : "";
   return `<article class="lesson">
     <div class="eyebrow"><span class="lbl">${esc(m?m.nome:"")}</span>${tot>1?`<span class="dot"></span><span class="lbl">Aula ${pad(ix+1)} de ${pad(tot)}</span>`:""}${!a.publicado?`<span class="dot"></span><span class="lbl">Rascunho</span>`:""}</div>
-    <h1>${num?`<span class="hn">${esc(num)}</span>`:""}${esc(semNum(a.titulo))}</h1>
+    <h1>${esc(semNum(a.titulo))}</h1>
     ${lnav}
     <div style="height:40px"></div>
     ${(a.objetivo||a.quando)?`<div class="facts">${a.objetivo?`<div><span class="lbl">Para que serve</span><p>${rich(a.objetivo)}</p></div>`:""}${a.quando?`<div><span class="lbl">Quando fazer</span><p>${rich(a.quando)}</p></div>`:""}</div>`:""}
