@@ -95,40 +95,85 @@ h2.sec{font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin:34px 
 .opt .arw{font-size:20px;letter-spacing:0}
 .opt .chip{font-size:9px}
 
-/* Aula */
-.lesson{max-width:860px;padding-block:30px}
-.lesson h1{font-size:clamp(26px,4.4vw,40px);letter-spacing:.12em;text-transform:uppercase;line-height:1.2}
-.lesson .sw{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 0}
-.lesson .sw button{border:1px solid var(--line);background:var(--bg);padding:5px 10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
-.lesson .sw button.cur{border-color:var(--fg);background:var(--fg);color:var(--bg)}
-.rule{height:3px;background:var(--fg);margin:20px 0 24px;width:72px}
-.facts{display:grid;gap:14px;margin-bottom:32px}
-.facts > div{border-left:3px solid var(--fg);padding:2px 0 2px 16px}
-.facts p{margin:4px 0 0;white-space:pre-line;font-size:17px;line-height:1.6}
-.video{display:flex;align-items:center;gap:16px;border:1px solid var(--fg);padding:16px 18px;margin-bottom:30px;text-decoration:none}
+/* Aula — apresentação editorial (nov/2026) */
+.lesson{max-width:880px;padding-block:40px 10px}
+.lesson .eyebrow{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.lesson .eyebrow .dot{width:3px;height:3px;background:var(--line);border-radius:50%}
+.lesson h1{font-size:clamp(26px,4.2vw,40px);letter-spacing:.1em;text-transform:uppercase;line-height:1.2;margin-top:14px}
+.lesson h1 .hn{color:var(--line);margin-right:.45em;font-variant-numeric:tabular-nums}
+.rule{height:2px;background:var(--fg);margin:26px 0 30px;width:56px}
+
+/* Navegação entre aulas */
+.lnav{margin-top:28px}
+.lnav .track{display:flex;gap:4px}
+.lnav .seg{flex:1;min-width:0;height:18px;border:0;background:none;padding:0;position:relative}
+.lnav .seg::before{content:"";position:absolute;left:0;right:0;top:8px;height:1px;background:var(--line);transition:background .2s,height .2s,top .2s}
+.lnav .seg.ok::before{background:var(--ink3);height:2px;top:8px}
+.lnav .seg:hover::before{background:var(--fg)}
+.lnav .seg.cur::before{background:var(--fg);height:3px;top:7px}
+.lnav .lbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
+.lnav .lnk{background:none;border:0;padding:6px 0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);white-space:nowrap}
+.lnav .lnk:hover:not([disabled]){color:var(--fg)}
+.lnav .lnk[disabled]{opacity:.3;cursor:default}
+.lnav .idxb{color:var(--fg)}
+.lnav .idxb .car{display:inline-block;width:14px;text-align:center;margin-left:6px}
+.lidx{list-style:none;margin:14px 0 0;padding:0;border-top:1px solid var(--fg);display:grid;grid-template-columns:1fr 1fr;column-gap:32px}
+.lidx li{border-bottom:1px solid var(--line)}
+.lidx button{width:100%;background:none;border:0;padding:13px 2px;display:grid;grid-template-columns:44px minmax(0,1fr) 18px;gap:10px;align-items:baseline;text-align:left;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);line-height:1.45}
+.lidx button .n{color:var(--line);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.lidx button .s{color:var(--ink3);text-align:right}
+.lidx button:hover{color:var(--fg)}
+.lidx button:hover .n{color:var(--fg)}
+.lidx button.cur{color:var(--fg)}
+.lidx button.cur .n{color:var(--fg)}
+.lidx button.cur .t{border-bottom:1px solid var(--fg)}
+
+/* Para que serve / Quando fazer */
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:20px 40px;margin-bottom:44px}
+.facts > div{border-top:1px solid var(--fg);padding-top:14px}
+.facts p{margin:8px 0 0;white-space:pre-line;font-size:16px;line-height:1.7;color:var(--ink2)}
+.video{display:flex;align-items:center;gap:16px;border:1px solid var(--fg);padding:16px 18px;margin-bottom:40px;text-decoration:none}
 .video:hover{background:var(--soft)}
 .video .pl{width:44px;height:44px;border-radius:50%;background:var(--inv-bg);display:grid;place-items:center;flex:none}
 .video .pl::after{content:"";border-left:13px solid var(--inv-fg);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
-.player{margin:0 0 30px}
+.player{margin:0 0 44px}
 .player .frame{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--fg)}
 .player iframe,.player video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 .player .cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px}
 .vbox{border:1px solid var(--fg);padding:18px;display:grid;gap:12px}
 .vbox .or{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3)}
-.part > .lbl{display:block;border-bottom:1px solid var(--fg);padding-bottom:10px;margin-bottom:24px}
-.step{display:grid;grid-template-columns:60px minmax(0,1fr);gap:18px;padding-bottom:34px}
-.step .sn{width:44px;height:44px;border:1px solid var(--fg);display:grid;place-items:center;font-size:16px;font-variant-numeric:tabular-nums}
-.step .tx{font-size:19px;line-height:1.7;white-space:pre-line}
-.step .tx strong{font-weight:400;background:var(--inv-bg);color:var(--inv-fg);padding:0 6px;letter-spacing:.04em}
+
+/* Conteúdo da aula */
+.part > .lbl{display:block;border-bottom:1px solid var(--fg);padding-bottom:12px;margin-bottom:6px}
+.step{display:grid;grid-template-columns:72px minmax(0,1fr);gap:20px;padding-block:30px;border-bottom:1px solid var(--soft)}
+.step:last-child{border-bottom:0}
+.step .sn{display:block;width:32px;border-top:1px solid var(--fg);padding-top:9px;font-size:12px;letter-spacing:.2em;color:var(--ink3);font-variant-numeric:tabular-nums}
+.step .tx{font-size:18px;line-height:1.75;color:var(--fg)}
+.step .tx p{margin:0}
+.step .tx .gap{display:block;height:14px}
+.step .tx .sh{font-size:14px;letter-spacing:.22em;text-transform:uppercase;line-height:1.5;margin:22px 0 10px;color:var(--fg)}
+.step .tx .sh:first-child{margin-top:0}
+.step .tx ul.bl{list-style:none;margin:4px 0 6px;padding:0}
+.step .tx ul.bl li{position:relative;padding-left:26px;margin-bottom:8px}
+.step .tx ul.bl li::before{content:"";position:absolute;left:2px;top:.85em;width:12px;height:1px;background:var(--fg)}
+.step .tx strong,.facts strong,.attn strong{font-weight:400;color:var(--fg);border-bottom:1px solid var(--fg);padding-bottom:1px;letter-spacing:.03em}
+.step .tx strong.lead{border:0;padding:0;margin-right:4px;font-size:.8em;letter-spacing:.18em;text-transform:uppercase}
 .step .tx a{text-decoration:underline;text-underline-offset:3px;word-break:break-all}
-.step figure{margin:16px 0 0}
+.step figure{margin:18px 0 0}
 .step img{width:100%;display:block;border:1px solid var(--line);cursor:zoom-in;background:var(--soft)}
 .step figcaption{font-size:12px;color:var(--ink3);margin-top:6px;letter-spacing:.06em}
-.attn{border:1px solid var(--fg);padding:20px 22px;margin-bottom:34px}
-.attn ul{margin:10px 0 0;padding-left:18px}
-.attn li{margin-bottom:6px;font-size:17px}
+.attn{background:var(--soft);border-left:2px solid var(--fg);padding:24px 28px;margin:14px 0 44px}
+.attn ul{list-style:none;margin:12px 0 0;padding:0}
+.attn li{position:relative;padding-left:24px;margin-bottom:8px;font-size:16px;line-height:1.7;color:var(--ink2)}
+.attn li::before{content:"";position:absolute;left:0;top:.85em;width:12px;height:1px;background:var(--fg)}
 .done-row{border-top:1px solid var(--fg);padding-top:22px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .note{font-size:13px;color:var(--ink3);margin:0}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:40px}
+.pg{background:var(--bg);border:1px solid var(--line);padding:20px 22px;text-align:left;display:flex;flex-direction:column;gap:8px;transition:border-color .2s,background .2s,color .2s}
+.pg .pt{font-size:14px;letter-spacing:.14em;text-transform:uppercase;line-height:1.45}
+.pg.nx{text-align:right;align-items:flex-end}
+.pg:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.pg:hover .lbl{color:var(--bg)}
 
 /* Gestão */
 .panel{padding-block:30px;display:grid;gap:22px}
@@ -161,8 +206,10 @@ footer.sg{margin-top:56px;border-top:1px solid var(--line);padding-top:18px;text
 
 @media (max-width:760px){
   .row2{grid-template-columns:1fr}
-  .step{grid-template-columns:1fr;gap:10px}
-  .step .tx{font-size:18px}
+  .step{grid-template-columns:1fr;gap:12px}
+  .step .tx{font-size:17px}
+  .facts,.lidx,.pager{grid-template-columns:1fr}
+  .lnav .lnk .hide-sm{display:none}
   .nav{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -195,6 +242,25 @@ function rich(s){
   h=h.replace(/(https?:\/\/[^\s<]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
   return h;
 }
+// Texto da aula em blocos: linha só com **título** vira subtítulo, linhas com • viram lista. Só apresentação, o conteúdo salvo não muda.
+function richBlock(s){
+  const lines=String(s==null?"":s).replace(/\r/g,"").split("\n");
+  const out=[]; let ul=null;
+  const flush=()=>{ if(ul){ out.push(`<ul class="bl">${ul.join("")}</ul>`); ul=null; } };
+  const lead=h=>h.replace(/^<strong>(.+?)<\/strong>/,'<strong class="lead">$1</strong>');
+  for(const raw of lines){
+    const l=raw.trim(); let m;
+    if(!l){ flush(); if(out.length && out[out.length-1]!=='<span class="gap"></span>') out.push('<span class="gap"></span>'); continue; }
+    if((m=l.match(/^\*\*([^*]+)\*\*:?$/))){ flush(); out.push(`<h3 class="sh">${esc(m[1])}</h3>`); continue; }
+    if((m=l.match(/^[•·▪◦–—-]\s+(.*)$/))){ (ul=ul||[]).push(`<li>${lead(rich(m[1]))}</li>`); continue; }
+    flush(); out.push(`<p>${lead(rich(l))}</p>`);
+  }
+  flush();
+  while(out.length && out[out.length-1]==='<span class="gap"></span>') out.pop();
+  return out.join("");
+}
+const numOf = t => { const m=String(t||"").match(/^\s*(\d+(?:\.\d+)*)\.?\s+/); return m?m[1]:""; };
+const semNum = t => String(t||"").replace(/^\s*\d+(?:\.\d+)*\.?\s+/,"");
 function errMsg(e){
   const m=(e&&(e.message||e.error_description))||String(e||"");
   if(/Invalid login/i.test(m)) return "Usuário ou senha incorretos.";
@@ -426,16 +492,26 @@ function moduloHTML(){
 function aulaHTML(){
   const a=aulaById(S.view.id); if(!a) return `<div class="empty" style="margin-top:24px"><b>Aula não encontrada</b></div>`;
   const m=modById(a.modulo_id), sib=aulasOf(a.modulo_id), et=a.etapas||[], at=a.atencao||[];
+  const ix=sib.findIndex(x=>x.id===a.id), tot=sib.length, prev=sib[ix-1], next=sib[ix+1], num=numOf(a.titulo);
+  const lnav = tot>1 ? `<nav class="lnav" aria-label="Aulas do módulo">
+      <div class="track">${sib.map(x=>`<button type="button" data-aula="${x.id}" class="seg${x.id===a.id?" cur":""}${S.feitos[x.id]?" ok":""}" title="${esc(x.titulo)}" aria-label="${esc(x.titulo)}"></button>`).join("")}</div>
+      <div class="lbar">
+        <button type="button" class="lnk" ${prev?`data-aula="${prev.id}"`:"disabled"}>‹ <span class="hide-sm">Anterior</span></button>
+        <button type="button" class="lnk idxb" data-idx="1" aria-expanded="${S.idx?"true":"false"}">${pad(ix+1)} / ${pad(tot)} <span class="hide-sm">· Todas as aulas</span><span class="car">${S.idx?"−":"+"}</span></button>
+        <button type="button" class="lnk" ${next?`data-aula="${next.id}"`:"disabled"}><span class="hide-sm">Próxima</span> ›</button>
+      </div>
+      ${S.idx?`<ol class="lidx">${sib.map((x,i)=>`<li><button type="button" data-aula="${x.id}" class="${x.id===a.id?"cur":""}"><span class="n">${esc(numOf(x.titulo)||pad(i+1))}</span><span class="t">${esc(semNum(x.titulo))}</span><span class="s">${S.feitos[x.id]?"✓":""}</span></button></li>`).join("")}</ol>`:""}
+    </nav>` : "";
   return `<article class="lesson">
-    <span class="lbl">${esc(m?m.nome:"")}${!a.publicado?" · Rascunho":""}</span>
-    <h1 style="margin-top:6px">${esc(a.titulo)}</h1>
-    ${sib.length>1?`<div class="sw">${sib.map(x=>`<button type="button" data-aula="${x.id}" class="${x.id===a.id?"cur":""}">${esc(x.titulo)}</button>`).join("")}</div>`:""}
-    <div class="rule"></div>
+    <div class="eyebrow"><span class="lbl">${esc(m?m.nome:"")}</span>${tot>1?`<span class="dot"></span><span class="lbl">Aula ${pad(ix+1)} de ${pad(tot)}</span>`:""}${!a.publicado?`<span class="dot"></span><span class="lbl">Rascunho</span>`:""}</div>
+    <h1>${num?`<span class="hn">${esc(num)}</span>`:""}${esc(semNum(a.titulo))}</h1>
+    ${lnav}
+    <div style="height:40px"></div>
     ${(a.objetivo||a.quando)?`<div class="facts">${a.objetivo?`<div><span class="lbl">Para que serve</span><p>${rich(a.objetivo)}</p></div>`:""}${a.quando?`<div><span class="lbl">Quando fazer</span><p>${rich(a.quando)}</p></div>`:""}</div>`:""}
     ${videoHTML(a.video)}
     <section class="part"><span class="lbl">Passo a passo</span>
       ${et.length?et.map((e,i)=>`<div class="step"><span class="sn">${pad(i+1)}</span><div style="min-width:0">
-          <div class="tx">${rich(e.texto)}</div>
+          <div class="tx">${richBlock(e.texto)}</div>
           ${e.imagem?`<figure><img data-img="${esc(e.imagem)}" alt="Exemplo da etapa ${i+1}" data-zoom="1"><figcaption>Toque na imagem para ampliar</figcaption></figure>`:""}
         </div></div>`).join("")
         :`<div class="empty"><b>Passo a passo em construção</b>Esta aula ainda está sendo preparada pela coordenação.</div>`}
@@ -449,6 +525,7 @@ function aulaHTML(){
         <button type="button" class="btn" data-mod="${a.modulo_id}">Voltar ao módulo</button>
       </div>
     </div>
+    ${tot>1?`<div class="pager">${prev?`<button type="button" class="pg" data-aula="${prev.id}"><span class="lbl">‹ Aula anterior</span><span class="pt">${esc(semNum(prev.titulo))}</span></button>`:`<span></span>`}${next?`<button type="button" class="pg nx" data-aula="${next.id}"><span class="lbl">Próxima aula ›</span><span class="pt">${esc(semNum(next.titulo))}</span></button>`:`<span></span>`}</div>`:""}
   </article>`;
 }
 
@@ -735,7 +812,8 @@ document.addEventListener("click",async ev=>{
     if(d.go==="usuarios"){ go({name:"usuarios"}); await loadUsers(); return render(); }
     return go({name:d.go}); }
   if(d.mod) return go({name:"modulo",id:d.mod});
-  if(d.aula) return go({name:"aula",id:d.aula});
+  if(d.idx){ S.idx=!S.idx; return render(); }
+  if(d.aula){ S.idx=false; return go({name:"aula",id:d.aula}); }
   if(d.done||d.undone){
     const id=d.done||d.undone;
     if(d.done){ const r=await S.sb.from("academy_progresso").insert({usuario_id:S.user.id,aula_id:id}); if(r.error&&!/duplicate/i.test(r.error.message)) return toast(errMsg(r.error)); S.feitos[id]=new Date().toISOString(); toast("Registrado"); }
