@@ -225,6 +225,249 @@ footer.sg{margin-top:56px;border-top:1px solid var(--line);padding-top:18px;text
   .nav{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== Card de entrada do BEM VINDO na tela inicial ===== */
+.feats{display:grid;gap:12px;margin-top:6px}
+.feats .feat{margin-top:0}
+.feat{position:relative;overflow:hidden;width:100%;margin-top:6px;border:0;background:#000;color:#fff;text-align:left;padding:40px 38px;display:grid;grid-template-columns:1fr auto;gap:18px 30px;align-items:end;isolation:isolate}
+.feat::before{content:"";position:absolute;inset:-30%;z-index:-2;background:radial-gradient(40% 50% at 18% 30%,rgba(174,169,180,.38),transparent 70%),radial-gradient(40% 50% at 85% 80%,rgba(91,91,96,.55),transparent 70%);filter:blur(26px);transition:transform 1.4s cubic-bezier(.22,.8,.2,1)}
+.feat::after{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 10px,rgba(0,0,0,.2) 10px 12px,transparent 12px 16px);-webkit-mask-image:linear-gradient(90deg,transparent 35%,#000 80%);mask-image:linear-gradient(90deg,transparent 35%,#000 80%)}
+.feat:hover::before{transform:translateX(5%) scale(1.06)}
+.feat .lbl{color:#aea9b4}
+.feat .ft{display:block;font-size:clamp(22px,3.4vw,32px);letter-spacing:.22em;text-transform:uppercase;line-height:1.2;margin-top:10px}
+.feat .fd{display:block;color:#aea9b4;margin-top:10px;max-width:52ch;font-size:15px;line-height:1.6}
+.feat .fgo{border:1px solid rgba(255,255,255,.5);padding:14px 24px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;white-space:nowrap;transition:background .3s,color .3s}
+.feat:hover .fgo{background:#fff;color:#000}
+@media (max-width:760px){.feat{grid-template-columns:1fr;padding:30px 24px}}
+
+/* ===== Apresentação BEM VINDO: vidro canelado, sofisticada com toque vintage (nov/2026) ===== */
+html.ap-on,html.ap-on body{overflow:hidden}
+.ap{position:fixed;inset:0;z-index:60;background:#000;color:#fff;overflow:hidden;font-family:var(--font);-webkit-font-smoothing:antialiased}
+.ap button{font-family:inherit;color:inherit}
+.ap-bg{position:absolute;inset:-20%;pointer-events:none;filter:blur(34px);animation:apDrift 30s ease-in-out infinite alternate;
+  background:radial-gradient(36% 30% at 22% 26%,rgba(174,169,180,.30),transparent 70%),radial-gradient(34% 32% at 80% 72%,rgba(91,91,96,.48),transparent 70%),radial-gradient(52% 40% at 60% 8%,rgba(65,65,66,.6),transparent 70%),#000}
+@keyframes apDrift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(3%,-2%,0) scale(1.07)}100%{transform:translate3d(-3%,2%,0) scale(1.02)}}
+.ap-grain{position:absolute;inset:-50%;pointer-events:none;opacity:.10;mix-blend-mode:overlay;animation:apGrain 1.1s steps(6) infinite;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes apGrain{0%,100%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-2%)}60%{transform:translate(-2%,-4%)}80%{transform:translate(4%,2%)}}
+.ap-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 52%,rgba(0,0,0,.78) 100%)}
+.ap-frame{position:absolute;inset:14px;border:1px solid rgba(255,255,255,.13);pointer-events:none}
+.ap-frame::before{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.06)}
+.ap-frame i{position:absolute;width:7px;height:7px;border:1px solid rgba(255,255,255,.4);background:#000;transform:rotate(45deg)}
+.ap-frame i:nth-child(1){top:-4px;left:-4px}.ap-frame i:nth-child(2){top:-4px;right:-4px}.ap-frame i:nth-child(3){bottom:-4px;left:-4px}.ap-frame i:nth-child(4){bottom:-4px;right:-4px}
+.ap-ui{position:absolute;inset:14px;display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.ap-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 28px 8px}
+.ap-wm{font-size:11px;letter-spacing:.5em;text-transform:uppercase;white-space:nowrap}
+.ap-where{flex:1;text-align:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#aea9b4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .4s}
+.ap-tbs{display:flex;gap:2px;flex-wrap:nowrap}
+.ap-tb{background:none;border:0;padding:6px 8px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#aea9b4!important;white-space:nowrap;transition:color .25s}
+.ap-tb:hover{color:#fff!important}
+.ap-stage{position:relative;min-height:0}
+.ap-slot{position:absolute;inset:0;display:grid;place-items:center;padding:12px 96px 16px;will-change:transform}
+.ap-arw{position:absolute;top:50%;z-index:2;width:54px;height:54px;margin-top:-27px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.04);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:grid;place-items:center;transition:background .3s,color .3s,border-color .3s,opacity .3s}
+.ap-arw.l{left:22px}.ap-arw.r{right:22px}
+.ap-arw:hover:not([disabled]){background:#fff;color:#000!important;border-color:#fff}
+.ap-arw[disabled]{opacity:.15;cursor:default}
+.ap-arw svg{width:18px;height:18px}
+.ap-bot{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:12px 28px 20px}
+.ap-count{min-width:150px;white-space:nowrap;text-transform:uppercase;font-size:10px;letter-spacing:.28em;color:#aea9b4;font-variant-numeric:tabular-nums}
+.ap-prog{flex:1;max-width:560px;display:flex;gap:6px}
+.ap-seg{flex:1;min-width:0;height:22px;background:none;border:0;padding:0;position:relative}
+.ap-seg::before{content:"";position:absolute;left:0;right:0;top:10px;height:1px;background:rgba(255,255,255,.18);transition:background .3s}
+.ap-seg:hover::before{background:rgba(255,255,255,.5)}
+.ap-seg i{position:absolute;left:0;top:10px;height:1px;width:calc(var(--f,0) * 100%);background:#fff;transition:width .7s cubic-bezier(.22,.8,.2,1)}
+.ap-seg.cur i{top:9.5px;height:2px}
+.ap-seg.done::after{content:"";position:absolute;right:-1px;top:7px;width:5px;height:5px;border:1px solid #fff;background:#000;transform:rotate(45deg)}
+.ap-hint{min-width:96px;display:flex;align-items:center;justify-content:flex-end;gap:10px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#aea9b4}
+.ap-mini{display:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.04);place-items:center;font-size:18px;line-height:1}
+.ap-mini[disabled]{opacity:.2}
+
+/* Vidro canelado que atravessa a tela na troca de página */
+.ap-pane{position:absolute;top:-6%;bottom:-6%;left:0;width:56%;z-index:5;pointer-events:none;opacity:0;transform:translateX(200%) skewX(-8deg);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.11) 0 1px,rgba(255,255,255,.035) 1px 9px,rgba(0,0,0,.12) 9px 12px,rgba(255,255,255,0) 12px 16px),linear-gradient(90deg,rgba(255,255,255,.015),rgba(255,255,255,.09) 50%,rgba(255,255,255,.015));
+  -webkit-backdrop-filter:blur(16px) brightness(1.18) saturate(110%);backdrop-filter:blur(16px) brightness(1.18) saturate(110%);
+  border-left:1px solid rgba(255,255,255,.4);border-right:1px solid rgba(255,255,255,.12);box-shadow:-40px 0 80px rgba(0,0,0,.35),40px 0 80px rgba(0,0,0,.25)}
+.ap-pane.swN{animation:apSwN 1s cubic-bezier(.7,0,.3,1) both}
+.ap-pane.swP{animation:apSwP 1s cubic-bezier(.7,0,.3,1) both}
+@keyframes apSwN{0%{opacity:1;transform:translateX(200%) skewX(-8deg)}100%{opacity:1;transform:translateX(-200%) skewX(-8deg)}}
+@keyframes apSwP{0%{opacity:1;transform:translateX(-200%) skewX(-8deg)}100%{opacity:1;transform:translateX(200%) skewX(-8deg)}}
+.ap-slot.inN{animation:apInN .95s cubic-bezier(.22,.8,.2,1) .24s both}
+.ap-slot.inP{animation:apInP .95s cubic-bezier(.22,.8,.2,1) .24s both}
+.ap-slot.outN{animation:apOutN .6s cubic-bezier(.6,0,.8,.3) both}
+.ap-slot.outP{animation:apOutP .6s cubic-bezier(.6,0,.8,.3) both}
+.ap-slot.in0{animation:apIn0 1.3s cubic-bezier(.22,.8,.2,1) both}
+@keyframes apInN{0%{opacity:0;transform:translateX(5%) scale(1.015);filter:blur(16px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes apInP{0%{opacity:0;transform:translateX(-5%) scale(1.015);filter:blur(16px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes apOutN{0%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:translateX(-4%) scale(.975);filter:blur(14px)}}
+@keyframes apOutP{0%{opacity:1;transform:none;filter:none}100%{opacity:0;transform:translateX(4%) scale(.975);filter:blur(14px)}}
+@keyframes apIn0{0%{opacity:0;transform:translateY(18px) scale(.985);filter:blur(10px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes apRise{0%{opacity:0;transform:translateY(14px);filter:blur(6px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes apTrack{0%{opacity:0;letter-spacing:.9em;filter:blur(8px)}100%{opacity:1;letter-spacing:.42em;filter:none}}
+@keyframes apSheen{0%,55%{background-position:130% 0}100%{background-position:-30% 0}}
+
+/* Painel de vidro */
+.ap-card{position:relative;width:100%;max-width:880px;max-height:100%;display:flex;flex-direction:column;overflow:hidden;
+  background:linear-gradient(140deg,rgba(255,255,255,.11),rgba(255,255,255,.03) 45%,rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.17);
+  -webkit-backdrop-filter:blur(26px) saturate(115%);backdrop-filter:blur(26px) saturate(115%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.04),0 50px 110px -24px rgba(0,0,0,.85)}
+.ap-card::before{content:"";position:absolute;inset:8px;border:1px solid rgba(255,255,255,.07);pointer-events:none;z-index:1}
+.ap-card::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.07) 47%,transparent 56%);background-size:260% 100%;animation:apSheen 10s ease-in-out infinite}
+.ap-sc{position:relative;z-index:2;min-height:0;overflow:auto;padding:56px 64px;scrollbar-width:thin;scrollbar-color:#5b5b60 transparent}
+.ap-big{position:absolute;right:48px;bottom:-.14em;z-index:0;font-size:clamp(150px,20vw,280px);line-height:1;letter-spacing:.08em;color:rgba(255,255,255,.025);-webkit-text-stroke:1px rgba(255,255,255,.22);pointer-events:none;user-select:none}
+@media (max-width:760px){.ap-big{right:18px;font-size:150px}}
+
+/* Tipografia dos slides */
+.ap-kick{font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:#aea9b4}
+.ap-lbl{display:block;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:#aea9b4;margin-bottom:8px}
+.ap-h{font-size:clamp(26px,3.8vw,42px);font-weight:400;letter-spacing:.12em;text-transform:uppercase;line-height:1.18;margin:14px 0 0;max-width:20ch;text-wrap:balance}
+.ap-orn{display:flex;align-items:center;gap:12px;margin:24px 0 28px}
+.ap-orn i{width:56px;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.6),rgba(255,255,255,0))}
+.ap-orn i:first-child{width:28px;background:rgba(255,255,255,.6)}
+.ap-orn b{width:6px;height:6px;border:1px solid rgba(255,255,255,.75);transform:rotate(45deg);flex:none}
+.ap-c .ap-orn{justify-content:center}
+.ap-c .ap-orn i,.ap-c .ap-orn i:first-child{width:64px}
+.ap-c .ap-orn i:first-child{background:linear-gradient(270deg,rgba(255,255,255,.6),rgba(255,255,255,0))}
+.ap-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:16px;margin-bottom:32px}
+.ap-head .ap-kick:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ap-pg{white-space:nowrap;font-variant-numeric:tabular-nums}
+.ap-pg i{font-style:normal;color:#5b5b60;margin:0 4px}
+.ap-acts{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:36px}
+.ap-c .ap-acts{justify-content:center}
+.ap-cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000!important;border:1px solid #fff;padding:15px 30px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;transition:background .35s,color .35s,letter-spacing .45s}
+.ap-cta:hover{background:transparent;color:#fff!important;letter-spacing:.36em}
+.ap-cta.ghost{background:rgba(255,255,255,.03);color:#fff!important;border-color:rgba(255,255,255,.4)}
+.ap-cta.ghost:hover{background:#fff;color:#000!important}
+.ap-chip{border:1px solid rgba(255,255,255,.4);padding:7px 13px;font-size:10px;letter-spacing:.22em;text-transform:uppercase}
+
+/* Capa */
+.ap-c .ap-sc{text-align:center}
+.ap-capa .ap-sc{padding:56px 56px 44px}
+@media (max-height:820px){.ap-capa .ap-sc{padding:40px 48px 32px}.ap-capa .ap-orn{margin:16px 0 18px}.ap-capa .ap-acts{margin-top:26px}.ap-sig{margin-top:26px}}
+.ap-capa .ap-sc>*{animation:apRise 1.1s cubic-bezier(.22,.8,.2,1) both}
+.ap-capa .ap-sc>:nth-child(1){animation-delay:.2s}.ap-capa .ap-sc>:nth-child(3){animation-delay:.9s}.ap-capa .ap-sc>:nth-child(4){animation-delay:1.1s}.ap-capa .ap-sc>:nth-child(5){animation-delay:1.25s}.ap-capa .ap-sc>:nth-child(6){animation-delay:1.45s}.ap-capa .ap-sc>:nth-child(7){animation-delay:1.65s}
+.ap-mark{display:block;font-size:clamp(26px,5.4vw,58px);font-weight:400;letter-spacing:.42em;padding-left:.42em;text-transform:uppercase;line-height:1.12;margin:20px 0 0}
+.ap-capa .ap-mark{animation:apTrack 2.4s cubic-bezier(.22,.8,.2,1) .35s both}
+.ap-hello{font-size:clamp(18px,2.2vw,22px);letter-spacing:.06em;margin:0 0 12px}
+.ap-lead{color:#aea9b4;max-width:46ch;margin:0 auto;line-height:1.75;font-size:16px}
+.ap-sig{display:block;margin-top:40px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#aea9b4}
+
+/* Sumário */
+.ap-toc{list-style:none;margin:6px 0 0;padding:0}
+.ap-toc button{width:100%;display:flex;align-items:baseline;gap:16px;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.07);padding:13px 0;text-align:left;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.84)!important;transition:color .25s,padding .35s}
+.ap-toc button:hover{color:#fff!important;padding-left:10px}
+.ap-toc .n{width:46px;flex:none;color:#aea9b4;letter-spacing:.08em}
+.ap-toc .t{flex:0 1 auto;min-width:0;line-height:1.45}
+.ap-toc .ld{flex:1;min-width:24px;border-bottom:1px dotted rgba(255,255,255,.3);transform:translateY(-4px)}
+.ap-toc .s{flex:none;color:#aea9b4;font-variant-numeric:tabular-nums}
+.ap-toc .s.ok{color:#fff}
+
+/* Abertura de capítulo */
+.ap-cap .ap-sc{padding:64px 64px 72px;min-height:min(470px,62vh);display:flex;flex-direction:column;justify-content:center}
+.ap-facts{display:grid;grid-template-columns:1fr 1fr;gap:22px 44px;max-width:680px}
+.ap-facts>div{border-top:1px solid rgba(255,255,255,.26);padding-top:14px}
+.ap-facts p{margin:0;color:rgba(255,255,255,.84);line-height:1.7;font-size:16px}
+
+/* Conteúdo das páginas */
+.ap-body{font-size:18px;line-height:1.85;color:rgba(255,255,255,.88)}
+.ap-body p{margin:0}
+.ap-body .gap{display:block;height:16px}
+.ap-body .sh{display:flex;align-items:center;gap:14px;font-size:12.5px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;line-height:1.5;color:#fff;margin:30px 0 12px}
+.ap-body .sh::before{content:"";width:18px;height:1px;background:#fff;flex:none}
+.ap-body .sh:first-child{margin-top:0}
+.ap-body ul.bl,.ap-attn ul{list-style:none;margin:6px 0;padding:0}
+.ap-body ul.bl li,.ap-attn li{position:relative;padding-left:28px;margin-bottom:10px}
+.ap-body ul.bl li::before,.ap-attn li::before{content:"";position:absolute;left:2px;top:.8em;width:5px;height:5px;border:1px solid rgba(255,255,255,.75);transform:rotate(45deg)}
+.ap strong{font-weight:400;color:#fff;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:1px}
+.ap strong.lead{border:0;padding:0;margin-right:6px;font-size:.78em;letter-spacing:.2em;text-transform:uppercase}
+.ap-body a,.ap-attn a,.ap-facts a{color:#fff;text-underline-offset:3px;word-break:break-all}
+.ap .org .ob{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.3);color:#fff}
+.ap .org .ob.lead{background:#fff;color:#000;border-color:#fff}
+.ap .org .ob.lead .od{color:#5b5b60}
+.ap .org .od,.ap .org .ot .lbl{color:#aea9b4}
+.ap .org .ol{background:rgba(255,255,255,.4)}
+.ap .org .og{border-top-color:rgba(255,255,255,.3)}
+.ap .org .og .ob{border-color:rgba(255,255,255,.18)}
+.ap-q .ap-sc{min-height:min(420px,56vh);display:flex;flex-direction:column}
+.ap-quote{margin:auto;max-width:28ch;text-align:center;font-size:clamp(22px,3.1vw,34px);line-height:1.5;letter-spacing:.02em;position:relative;padding:58px 0 10px}
+.ap-quote::before{content:"\201C";position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:96px;line-height:1;color:rgba(255,255,255,.24)}
+.ap-quote strong{border:0;display:block;margin-top:14px;font-size:.62em;letter-spacing:.24em;text-transform:uppercase}
+.ap-fig{margin:28px 0 0}
+.ap-fig img{width:100%;display:block;border:1px solid rgba(255,255,255,.16);cursor:zoom-in;background:#141415}
+.ap-fig figcaption{font-size:12px;color:#aea9b4;margin-top:8px;letter-spacing:.06em}
+.ap-vid video{display:block;margin:0 auto;max-width:100%;max-height:min(56vh,560px);background:#000;border:1px solid rgba(255,255,255,.16)}
+.ap-embed{position:relative;aspect-ratio:16/9;border:1px solid rgba(255,255,255,.16);background:#000}
+.ap-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ap-attn{border-left:1px solid #fff;background:rgba(255,255,255,.035);padding:22px 26px;margin:4px 0 0;font-size:16px;line-height:1.7;color:rgba(255,255,255,.86)}
+.ap-pil{display:flex;justify-content:center;align-items:center;gap:16px;font-size:12px;letter-spacing:.42em;text-transform:uppercase;margin:0 0 20px}
+.ap-pil i{width:5px;height:5px;border:1px solid rgba(255,255,255,.6);transform:rotate(45deg)}
+.ap-mark.sm{font-size:clamp(24px,4.4vw,46px);letter-spacing:.24em;padding-left:.24em;line-height:1.4}
+
+/* Leitura confortável (estilo stories) */
+.ap-card.ap-etapa{max-width:780px}
+.ap-etapa .ap-sc{display:flex;flex-direction:column;padding:44px 72px 34px}
+.ap-run{text-align:center;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#aea9b4;margin-bottom:40px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-run span{opacity:.5;margin:0 .5em}
+.ap-etapa .ap-body,.ap-etapa .ap-fig{margin-top:auto;margin-bottom:auto}
+.ap-etapa .ap-body+.ap-fig{margin-top:28px}
+.ap-folio{text-align:center;margin-top:0;padding-top:40px;font-size:11px;letter-spacing:.3em;color:#aea9b4;font-variant-numeric:tabular-nums}
+.ap-folio span{opacity:.5;margin:0 .35em;letter-spacing:.15em}
+.ap-etapa .ap-quote,.ap-etapa .ap-say{margin:auto 0}
+/* Formato livro: página em pé, alta */
+.ap-card,.ap-card.ap-etapa{max-width:640px;height:100%;max-height:920px}
+.ap-sc{flex:1}
+.ap-capa .ap-sc,.ap-cap .ap-sc,.ap-fim .ap-sc,.ap-final .ap-sc,.ap-video .ap-sc{display:flex;flex-direction:column;justify-content:center}
+.ap-sum .ap-sc{display:flex;flex-direction:column}
+.ap-facts{grid-template-columns:1fr;gap:18px}
+.ap-video .ap-vid video{max-height:min(62vh,640px)}
+@media (max-width:760px){.ap-card,.ap-card.ap-etapa{max-width:none;max-height:none}}
+@media (max-width:760px){.ap-etapa .ap-sc{padding:30px 24px 22px}.ap-run{margin-bottom:28px}.ap-folio{padding-top:28px}}
+.ap-story{display:flex;gap:3px;margin:-22px 0 24px;height:2px}
+.ap-story i{flex:1;background:rgba(255,255,255,.16);transition:background .5s}
+.ap-story i.on{background:#fff}
+.ap-story.line{display:block;position:relative;background:rgba(255,255,255,.16)}
+.ap-story.line b{position:absolute;left:0;top:0;bottom:0;background:#fff}
+.ap-body{font-size:19px;line-height:1.75}
+.ap-body>p:first-child,.ap-body>.sh+p{font-size:21px;line-height:1.6;color:#fff}
+.ap-body .sh{margin-bottom:16px}
+.ap-say{margin:auto 0;max-width:26ch;font-size:clamp(22px,2.9vw,31px);line-height:1.5;letter-spacing:.01em;color:#fff}
+.ap strong{border:0;padding:0 3px;margin:0 -1px;background:linear-gradient(transparent 60%,rgba(255,255,255,.2) 60%)}
+.ap strong.lead{background:none}
+.ap-quote strong{background:none}
+.ap-body ul.bl{margin:8px 0}
+.ap-body ul.bl li{font-size:18px;line-height:1.6;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);padding:14px 18px 14px 44px;margin-bottom:8px}
+.ap-body ul.bl li::before{left:20px;top:25px}
+.ap-slot.inN .ap-body>*,.ap-slot.inP .ap-body>*,.ap-slot.in0 .ap-body>*,.ap-slot.inN .ap-say,.ap-slot.inP .ap-say{animation:apRise .8s cubic-bezier(.22,.8,.2,1) both;animation-delay:.42s}
+.ap-slot .ap-body>:nth-child(2){animation-delay:.52s}.ap-slot .ap-body>:nth-child(3){animation-delay:.62s}.ap-slot .ap-body>:nth-child(n+4){animation-delay:.72s}
+.ap-slot.inN .ap-body li,.ap-slot.inP .ap-body li{animation:apRise .7s cubic-bezier(.22,.8,.2,1) both}
+.ap-slot .ap-body li:nth-child(1){animation-delay:.5s}.ap-slot .ap-body li:nth-child(2){animation-delay:.6s}.ap-slot .ap-body li:nth-child(3){animation-delay:.7s}.ap-slot .ap-body li:nth-child(4){animation-delay:.8s}
+.ap-tap{display:none}
+@media (pointer:coarse){.ap-kb{display:none}.ap-tap{display:inline}}
+@media (max-width:760px){
+  .ap-body{font-size:17.5px}
+  .ap-body>p:first-child,.ap-body>.sh+p{font-size:19px}
+  .ap-body ul.bl li{font-size:16.5px;padding:12px 14px 12px 38px}
+  .ap-body ul.bl li::before{left:16px;top:22px}
+  .ap-story{margin:-14px 0 20px}
+}
+@media (max-width:760px){
+  .ap-frame,.ap-ui{inset:8px}
+  .ap-top{padding:14px 14px 6px}
+  .ap-where,.ap-count,.ap-kb,.ap-arw,.ap-tb.hm{display:none}
+  .ap-wm{font-size:10px;letter-spacing:.34em}
+  .ap-tb{padding:6px 5px;letter-spacing:.16em}
+  .ap-slot{padding:6px 10px 8px}
+  .ap-sc,.ap-capa .ap-sc,.ap-cap .ap-sc{padding:38px 24px}
+  .ap-facts{grid-template-columns:1fr}
+  .ap-body{font-size:16.5px}
+  .ap-bot{padding:10px 14px 14px;gap:14px}
+  .ap-hint{min-width:0}
+  .ap-mini{display:grid}
+  .ap-prog{order:0}
+  .ap-pane{width:90%}
+}
+@media (prefers-reduced-motion:reduce){
+  .ap-bg,.ap-grain,.ap-card::after,.ap-pane,.ap-slot,.ap-capa .ap-sc>*,.ap-capa .ap-mark{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -459,8 +702,10 @@ function render(){
     (b.dataset.go==="conteudo"&&["conteudo","editModulo","editAula"].includes(v.name)) ||
     (b.dataset.go==="usuarios"&&["usuarios","editUser"].includes(v.name)) || b.dataset.go===v.name));
   crumbs();
-  const views={home:homeHTML,busca:homeHTML,modulo:moduloHTML,aula:aulaHTML,conta:contaHTML,usuarios:usuariosHTML,editUser:editUserHTML,conteudo:conteudoHTML,editModulo:editModuloHTML,editAula:editAulaHTML};
+  const views={home:homeHTML,busca:homeHTML,apres:apresHTML,modulo:moduloHTML,aula:aulaHTML,conta:contaHTML,usuarios:usuariosHTML,editUser:editUserHTML,conteudo:conteudoHTML,editModulo:editModuloHTML,editAula:editAulaHTML};
+  document.documentElement.classList.toggle("ap-on",v.name==="apres");
   el.innerHTML=(views[v.name]||homeHTML)();
+  if(v.name==="apres"){ apFull(true); apMount(); } else { apFull(false); apFS(false); }
   if(v.name==="aula"){ const a=aulaById(v.id)||{}; loadImages(a.etapas); loadVideo(a.video); }
   if(v.name==="editAula") loadVideo(S.edit&&S.edit.video);
   if(v.name==="editAula") loadImages(S.edit&&S.edit.etapas);
@@ -470,7 +715,7 @@ function crumbs(){
   const v=S.view, c=document.getElementById("crumbs"); if(!c) return;
   const p=[`<button type="button" data-go="home">Início</button>`];
   if(v.name==="modulo"){ const m=modById(v.id); p.push(`<span>/</span><span>${esc(m?m.nome:"")}</span>`); }
-  if(v.name==="aula"){ const a=aulaById(v.id), m=a&&modById(a.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-mod="${m.id}">${esc(m.nome)}</button>`); p.push(`<span>/</span><span>${esc(a?semNum(a.titulo):"")}</span>`); }
+  if(v.name==="aula"){ const a=aulaById(v.id), m=a&&modById(a.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-mod="${m.id}" data-ler="1">${esc(m.nome)}</button>`); p.push(`<span>/</span><span>${esc(a?semNum(a.titulo):"")}</span>`); }
   if(["conteudo","editModulo","editAula"].includes(v.name)){ p.push(`<span>/</span><button type="button" data-go="conteudo">Conteúdo</button>`);
     if(v.name==="editAula"&&S.edit){ const m=modById(S.edit.modulo_id); if(m) p.push(`<span>/</span><button type="button" data-editmod="${m.id}">${esc(m.nome)}</button>`); } }
   if(["usuarios","editUser"].includes(v.name)) p.push(`<span>/</span><button type="button" data-go="usuarios">Usuários</button>`);
@@ -492,7 +737,10 @@ function homeHTML(){
       ${aHits.length?`<h2 class="sec">Aulas</h2><div class="opts">${aHits.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span><span class="lbl" style="display:block;letter-spacing:.2em">${esc(modById(a.modulo_id).nome)}</span>${esc(semNum(a.titulo))}</span><span class="arw">›</span></button>`).join("")}</div>`:""}`
       : `<div class="empty"><b>Nada encontrado</b>Tente outra palavra, por exemplo acareação, estoque ou estorno.</div>`;
   } else {
-    body = mods.length ? `<h2 class="sec">Seus módulos</h2><div class="mods">${mods.map(modCard).join("")}</div>`
+    const aps=mods.filter(isApres), rest=mods.filter(m=>!isApres(m));
+    const feat = aps.length ? `<div class="feats">${aps.map((ap,k)=>{ const as=aulasOf(ap.id), dn=as.filter(a=>S.feitos[a.id]).length;
+      return `<button type="button" class="feat" data-mod="${ap.id}"><span><span class="lbl">${aps.length>1?`Parte ${ROM(k+1)} · `:""}${k===0?"Comece por aqui":"Em seguida"}${!ap.publicado?" · Rascunho":""}</span><span class="ft">${esc(ap.nome)}</span>${ap.descricao?`<span class="fd">${esc(ap.descricao)}</span>`:""}</span><span class="fgo">${as.length&&dn===as.length?"Aprendido · Rever":"Assistir à apresentação"} ›</span></button>`; }).join("")}</div>` : "";
+    body = mods.length ? `${feat}${rest.length?`<h2 class="sec">Seus módulos</h2><div class="mods">${rest.map(modCard).join("")}</div>`:""}`
       : `<div class="empty"><b>Nenhum módulo liberado</b>Quando a coordenação liberar módulos para você, eles aparecem aqui.</div>`;
   }
   return `<section class="hero"><span class="lbl">Olá, ${esc(S.perfil.nome.split(" ")[0])}</span>
@@ -510,7 +758,7 @@ function moduloHTML(){
   const m=modById(S.view.id); if(!m) return `<div class="empty" style="margin-top:24px"><b>Módulo não encontrado</b></div>`;
   const as=aulasOf(m.id);
   return `<section class="mhead"><span class="lbl">Módulo${!m.publicado?" · Rascunho":""}</span><h1 style="margin-top:6px">${esc(m.nome)}</h1>${m.descricao?`<p>${esc(m.descricao)}</p>`:""}
-      ${isEditor()?`<div style="margin-top:16px"><button type="button" class="btn sm ghost" data-editmod="${m.id}">Editar módulo</button></div>`:""}</section>
+      ${(isApres(m)||isEditor())?`<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">${isApres(m)?`<button type="button" class="btn sm solid" data-mod="${m.id}">Assistir à apresentação</button>`:""}${isEditor()?`<button type="button" class="btn sm ghost" data-editmod="${m.id}">Editar módulo</button>`:""}</div>`:""}</section>
     ${as.length?`<div class="ask">${esc(m.pergunta||"Selecione uma opção")}</div>
       <div class="opts">${as.map(a=>`<button type="button" class="opt" data-aula="${a.id}"><span>${esc(semNum(a.titulo))}${!a.publicado?` <span class="chip">Rascunho</span>`:""}</span><span class="arw">${S.feitos[a.id]?"✓":"›"}</span></button>`).join("")}</div>`
       :`<div class="empty" style="margin-top:24px"><b>Em construção</b>As opções deste módulo ainda estão sendo preparadas.</div>`}`;
@@ -548,7 +796,7 @@ function aulaHTML(){
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         ${isEditor()?`<button type="button" class="btn ghost" data-editaula="${a.id}">Editar aula</button>`:""}
         ${S.feitos[a.id]?`<button type="button" class="btn ghost" data-undone="${a.id}">Desmarcar</button>`:`<button type="button" class="btn solid" data-done="${a.id}">Aprendi esta tarefa</button>`}
-        <button type="button" class="btn" data-mod="${a.modulo_id}">Voltar ao módulo</button>
+        <button type="button" class="btn" data-mod="${a.modulo_id}" data-ler="1">Voltar ao módulo</button>
       </div>
     </div>
     ${tot>1?`<div class="pager">${prev?`<button type="button" class="pg" data-aula="${prev.id}"><span class="lbl">‹ Aula anterior</span><span class="pt">${esc(semNum(prev.titulo))}</span></button>`:`<span></span>`}${next?`<button type="button" class="pg nx" data-aula="${next.id}"><span class="lbl">Próxima aula ›</span><span class="pt">${esc(semNum(next.titulo))}</span></button>`:`<span></span>`}</div>`:""}
@@ -594,6 +842,252 @@ async function loadImages(etapas){
   }
   document.querySelectorAll("img[data-img]").forEach(img=>{ const u=S.urls[img.dataset.img]; if(u&&img.src!==u) img.src=u; });
 }
+
+/* ---------- Apresentação do módulo BEM VINDO: páginas com transição de vidro canelado ---------- */
+const isApres = m => !!m && (/bem\s*-?\s*vind[oa]/.test(fold(m.nome)) || /^apresenta/.test(fold(m.pergunta||"").trim()));
+const apresList = () => myMods().filter(isApres);
+const ROM = n => { const t=[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]]; let s=""; for(const [v,r] of t) while(n>=v){ s+=r; n-=v; } return s; };
+const capz = s => { s=String(s||""); return s.charAt(0).toUpperCase()+s.slice(1).toLowerCase(); };
+const ORN = `<span class="ap-orn" aria-hidden="true"><i></i><b></b><i></i></span>`;
+const CHEV_L = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg>`;
+const CHEV_R = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="m9 4 8 8-8 8"/></svg>`;
+const apKey = () => "sa-apres:"+((S.user&&S.user.id)||"")+":"+((S.ap&&S.ap.mid)||"");
+function apSave(i){ try{ localStorage.setItem(apKey(),String(i)); }catch(e){} }
+function apSaved(){ try{ return +localStorage.getItem(apKey())||0; }catch(e){ return 0; } }
+function apDeck(mid){
+  const d=[{k:"capa"},{k:"sumario"}];
+  aulasOf(mid).forEach((a,ci)=>{
+    d.push({k:"cap",a,ci});
+    if(a.video) d.push({k:"video",a,ci});
+    const et=a.etapas||[], pg=[];
+    et.forEach((e,ei)=>{ const ch=apChunks(e.texto); ch.forEach((txt,j)=>{
+      const cur={k:"etapa",a,ci,e,ei,txt,j,nj:ch.length,img:j===ch.length-1?e.imagem:null}, prv=pg[pg.length-1];
+      const pl=t=>String(t||"").replace(/\*\*/g,"").length, so=t=>!/\n/.test(String(t).trim())&&pl(t)<=220;
+      // junta na mesma página quando os dois trechos cabem juntos (nada é apagado)
+      if(prv&&!prv.img&&!/\[organograma\]/i.test(prv.txt+txt)&&!(prv.nj===1&&so(prv.txt))&&pl(prv.txt)+pl(txt)<=800){ prv.txt+="\n\n"+txt; prv.img=cur.img; prv.nj=2; }
+      else pg.push(cur); }); });
+    pg.forEach((x,k)=>{ x.pg=k+1; x.pt=pg.length; d.push(x); });
+    d.push({k:"fim",a,ci});
+  });
+  d.push({k:"final"});
+  return d;
+}
+// Divide o texto de uma etapa em páginas curtas, para leitura confortável. Nada é apagado: só muda a paginação.
+function apChunks(t){
+  const lines=String(t||"").replace(/\r/g,"").split("\n"), blocks=[]; let cur=null, org=null;
+  const push=()=>{ if(cur){ blocks.push(cur); cur=null; } };
+  for(const raw of lines){
+    const l=raw.trim();
+    if(org){ org.lines.push(raw); if(/^\[\/organograma\]$/i.test(l)){ blocks.push(org); org=null; } continue; }
+    if(/^\[organograma\]$/i.test(l)){ push(); org={k:"org",lines:[raw]}; continue; }
+    if(!l){ push(); continue; }
+    if(/^\*\*([^*]+)\*\*:?$/.test(l)){ push(); blocks.push({k:"h",lines:[raw]}); continue; }
+    const li=/^[•·▪◦–—-]\s+/.test(l);
+    if(cur&&cur.k!==(li?"li":"p")) push();
+    if(!cur) cur={k:li?"li":"p",lines:[]};
+    cur.lines.push(raw);
+  }
+  push(); if(org) blocks.push(org);
+  const L=b=>b.lines.join(" ").replace(/\*\*/g,"").length, out=[];
+  blocks.forEach(b=>{
+    if(b.k==="li"&&b.lines.length>8&&L(b)>700){ for(let i=0;i<b.lines.length;i+=6) out.push({k:"li",lines:b.lines.slice(i,i+4)}); return; }
+    if(b.k==="p"&&b.lines.length===1&&L(b)>1100){
+      const ss=b.lines[0].match(/[^.!?]+[.!?]+["”')]*\s*|[^.!?]+$/g)||[b.lines[0]], grp=[]; let g="";
+      ss.forEach(x=>{ if(g&&(g+x).length>700&&((g.match(/\*\*/g)||[]).length%2===0)){ grp.push(g.trim()); g=""; } g+=x; });
+      if(g.trim()) grp.push(g.trim());
+      grp.forEach(x=>out.push({k:"p",lines:[x]})); return;
+    }
+    out.push(b);
+  });
+  const pages=[]; let pg=[], size=0;
+  const flush=()=>{ if(pg.length){ pages.push(pg); pg=[]; size=0; } };
+  out.forEach(b=>{
+    if(b.k==="org"){ flush(); pages.push([b]); return; }
+    if(b.k==="h"){ if(size>650) flush(); pg.push(b); return; }
+    const n=L(b), soTitulo=pg.length&&pg.every(x=>x.k==="h");
+    if(pg.length&&!soTitulo&&size+n>900) flush();
+    pg.push(b); size+=n;
+  });
+  flush();
+  return pages.length?pages.map(p=>p.map(b=>b.lines.join("\n")).join("\n\n")):[""];
+}
+const apMin = a => Math.max(1,Math.round((a.etapas||[]).map(e=>e.texto||"").join(" ").split(/\s+/).filter(Boolean).length/180));
+// Tela inteira: dentro do Saint Center, a apresentação cobre o painel todo (menu e barra somem); ao iniciar, entra em tela cheia do navegador.
+function apFull(on){
+  try{
+    const fe=window.frameElement; if(!fe) return; const pd=fe.ownerDocument;
+    if(on){ if(fe.dataset.apSt===undefined) fe.dataset.apSt=fe.getAttribute("style")||"";
+      fe.style.cssText="position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;border:0;z-index:2147483000;background:#000";
+      pd.documentElement.style.overflow="hidden"; }
+    else if(fe.dataset.apSt!==undefined){ fe.setAttribute("style",fe.dataset.apSt); if(!fe.getAttribute("style")) fe.removeAttribute("style"); delete fe.dataset.apSt; pd.documentElement.style.overflow=""; }
+  }catch(e){}
+}
+function apFS(on){
+  try{ const d=(window.frameElement&&window.frameElement.ownerDocument)||document;
+    if(on){ if(!d.fullscreenElement&&d.documentElement.requestFullscreen) d.documentElement.requestFullscreen().catch(()=>{}); }
+    else if(d.fullscreenElement&&d.exitFullscreen) d.exitFullscreen().catch(()=>{});
+  }catch(e){}
+}
+function apOpen(mid){ S.ap={mid,deck:apDeck(mid),i:0,busy:false}; go({name:"apres",id:mid}); }
+function apresHTML(){
+  const m=modById(S.view.id); if(!m) return homeHTML();
+  if(!S.ap||S.ap.mid!==m.id) S.ap={mid:m.id,deck:apDeck(m.id),i:0,busy:false}; else S.ap.deck=apDeck(m.id);
+  S.ap.i=Math.min(S.ap.i,S.ap.deck.length-1); S.ap.busy=false;
+  const chs=aulasOf(m.id);
+  return `<div class="ap" id="ap" role="dialog" aria-label="Apresentação ${esc(m.nome)}">
+    <div class="ap-bg"></div><div class="ap-grain"></div><div class="ap-vig"></div>
+    <div class="ap-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="ap-ui">
+      <header class="ap-top">
+        <span class="ap-wm">Saint Germain</span>
+        <span class="ap-where" id="apWhere"></span>
+        <span class="ap-tbs">
+          <button type="button" class="ap-tb" data-apsum="1">Sumário</button>
+          ${isEditor()?`<button type="button" class="ap-tb hm" data-apedit="1">Editar</button>`:""}
+          <button type="button" class="ap-tb hm" data-mod="${m.id}" data-ler="1">Modo leitura</button>
+          <button type="button" class="ap-tb" data-apsair="1" aria-label="Fechar apresentação">Fechar ✕</button>
+        </span>
+      </header>
+      <div class="ap-stage" id="apStage">
+        <button type="button" class="ap-arw l" data-apgo="prev" aria-label="Página anterior">${CHEV_L}</button>
+        <button type="button" class="ap-arw r" data-apgo="next" aria-label="Próxima página">${CHEV_R}</button>
+      </div>
+      <footer class="ap-bot">
+        <span class="ap-count" id="apCount"></span>
+        <div class="ap-prog" id="apProg">${chs.map((a,ci)=>`<button type="button" class="ap-seg" data-apcap="${ci}" title="${esc(ROM(ci+1)+" · "+semNum(a.titulo))}" aria-label="${esc("Capítulo "+ROM(ci+1)+": "+semNum(a.titulo))}"><i></i></button>`).join("")}</div>
+        <span class="ap-hint"><button type="button" class="ap-mini" data-apgo="prev" aria-label="Página anterior">‹</button><span class="ap-kb">← → para navegar</span><span class="ap-tap">Toque para avançar</span><button type="button" class="ap-mini" data-apgo="next" aria-label="Próxima página">›</button></span>
+      </footer>
+    </div>
+    <div class="ap-pane" id="apPane" aria-hidden="true"></div>
+  </div>`;
+}
+function apSlideHTML(sl){
+  const m=modById(S.ap.mid)||{}, chs=aulasOf(S.ap.mid);
+  const tit=a=>esc(semNum(a.titulo));
+  if(sl.k==="capa"){
+    const sv=apSaved(), sd=S.ap.deck[sv];
+    const cont = sv>1 && sd && sd.a ? `<button type="button" class="ap-cta ghost" data-apgo="${sv}" data-apfs="1">Continuar · Capítulo ${ROM(sd.ci+1)}</button>` : "";
+    const ps=apresList(), pi=ps.findIndex(x=>x.id===S.ap.mid);
+    return `<article class="ap-card ap-c ap-capa"><div class="ap-sc">
+      <span class="ap-kick">Manual de Integração · ${ps.length>1?`Parte ${ROM(pi+1)} de ${ROM(ps.length)}`:"Suporte &amp; Customer Success"}</span>
+      <h1 class="ap-mark">Saint Germain</h1>
+      <div>${ORN}</div>
+      ${pi>0?`<p class="ap-hello" style="text-transform:uppercase;letter-spacing:.24em;font-size:15px">${esc(m.nome)}</p>`:`<p class="ap-hello">Boas-vindas, ${esc(capz(String(S.perfil.nome||"").split(" ")[0]))}.</p>`}
+      ${m.descricao?`<p class="ap-lead">${esc(m.descricao)}</p>`:`<p class="ap-lead"></p>`}
+      <div class="ap-acts"><button type="button" class="ap-cta" data-apgo="next" data-apfs="1">Iniciar a jornada</button>${cont}</div>
+      <span class="ap-sig">Juntos vamos mais longe</span>
+    </div></article>`;
+  }
+  if(sl.k==="sumario"){
+    return `<article class="ap-card ap-sum"><div class="ap-sc">
+      <span class="ap-kick">Sumário</span><h2 class="ap-h">A sua jornada</h2>${ORN}
+      <ol class="ap-toc">${chs.map((a,ci)=>`<li><button type="button" data-apcap="${ci}"><span class="n">${ROM(ci+1)}</span><span class="t">${tit(a)}</span><span class="ld"></span><span class="s${S.feitos[a.id]?" ok":""}">${S.feitos[a.id]?"✓":pad(ci+1)}</span></button></li>`).join("")}</ol>
+    </div></article>`;
+  }
+  if(sl.k==="cap"){
+    const a=sl.a;
+    return `<article class="ap-card ap-cap"><span class="ap-big" aria-hidden="true">${ROM(sl.ci+1)}</span><div class="ap-sc">
+      <span class="ap-kick">Capítulo ${ROM(sl.ci+1)} <span style="opacity:.55;margin:0 .6em">·</span> ${pad(sl.ci+1)} de ${pad(chs.length)}</span>
+      <h2 class="ap-h">${tit(a)}</h2>${ORN}
+      ${(a.objetivo||a.quando)?`<div class="ap-facts">${a.objetivo?`<div><span class="ap-lbl">Para que serve</span><p>${rich(a.objetivo)}</p></div>`:""}${a.quando?`<div><span class="ap-lbl">Quando</span><p>${rich(a.quando)}</p></div>`:""}</div>`:""}
+      <div class="ap-acts"><button type="button" class="ap-cta" data-apgo="next">Começar o capítulo</button><span class="ap-chip">≈ ${apMin(a)} min de leitura</span>${S.feitos[a.id]?`<span class="ap-chip">Aprendido</span>`:""}${!a.publicado?`<span class="ap-chip">Rascunho</span>`:""}</div>
+    </div></article>`;
+  }
+  if(sl.k==="video"){
+    const v=sl.a.video, em=isStoredVideo(v)?null:embedUrl(v);
+    const media = isStoredVideo(v) ? `<video data-video="${esc(v)}" controls playsinline preload="metadata"></video>`
+      : em ? `<div class="ap-embed"><iframe src="${esc(em)}" title="Vídeo do capítulo" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
+      : `<div class="ap-acts" style="justify-content:center"><a class="ap-cta" href="${esc(v)}" target="_blank" rel="noopener">Assistir ao vídeo</a></div>`;
+    return `<article class="ap-card ap-video"><div class="ap-sc">
+      <div class="ap-head"><span class="ap-kick">${ROM(sl.ci+1)} · ${tit(sl.a)}</span><span class="ap-kick ap-pg">Vídeo</span></div>
+      <div class="ap-vid">${media}</div>
+    </div></article>`;
+  }
+  if(sl.k==="etapa"){
+    const t=String(sl.txt||"").trim(), one=!/\n/.test(t)&&!/^[•·▪◦–—-]\s/.test(t)&&!/^\*\*[^*]+\*\*:?$/.test(t)&&!sl.img;
+    const q = one && sl.nj===1 && t.length<=220 && sl.pg===1;
+    const say = one && !q && t.length<=200;
+    return `<article class="ap-card ap-etapa${q||say?" ap-q":""}"><div class="ap-sc">
+      <div class="ap-run">${ROM(sl.ci+1)} <span>·</span> ${tit(sl.a)}</div>
+      ${q?`<blockquote class="ap-quote">${rich(t)}</blockquote>`:say?`<p class="ap-say">${rich(t)}</p>`:`<div class="ap-body">${richBlock(t)}</div>`}
+      ${sl.img?`<figure class="ap-fig"><img data-img="${esc(sl.img)}" alt="Imagem desta página" data-zoom="1"><figcaption>Toque na imagem para ampliar</figcaption></figure>`:""}
+      <div class="ap-folio">${sl.pg} <span>de</span> ${sl.pt}</div>
+    </div></article>`;
+  }
+  if(sl.k==="fim"){
+    const a=sl.a, at=a.atencao||[], last=sl.ci===chs.length-1, f=S.feitos[a.id];
+    return `<article class="ap-card ap-fim"><div class="ap-sc">
+      <span class="ap-kick">Capítulo ${ROM(sl.ci+1)} · Encerramento</span>
+      <h2 class="ap-h">${tit(a)}</h2>${ORN}
+      ${at.length?`<div class="ap-attn"><span class="ap-lbl">Atenção</span><ul>${at.map(x=>`<li>${rich(x)}</li>`).join("")}</ul></div>`:""}
+      <div class="ap-acts">${f?`<span class="ap-chip">Aprendido em ${fmtDate(f)}</span><button type="button" class="ap-tb" data-undone="${a.id}">Desmarcar</button>`:`<button type="button" class="ap-cta" data-done="${a.id}">Aprendi este capítulo</button>`}
+        <button type="button" class="ap-cta ghost" data-apgo="next">${last?"Concluir":"Próximo capítulo"} ›</button></div>
+    </div></article>`;
+  }
+  const feitos=chs.filter(a=>S.feitos[a.id]).length, ps=apresList(), pi=ps.findIndex(x=>x.id===S.ap.mid), nx=ps[pi+1];
+  if(nx) return `<article class="ap-card ap-c ap-final"><div class="ap-sc">
+    <span class="ap-kick">Fim da Parte ${ROM(pi+1)}</span>
+    <h2 class="ap-mark sm">Juntos vamos<br>mais longe</h2>${ORN}
+    <p class="ap-pil">Ouvir<i></i>Acolher<i></i>Resolver</p>
+    <p class="ap-lead">${feitos} de ${chs.length} capítulos marcados como aprendidos. A próxima etapa é a Parte ${ROM(pi+2)}: ${esc(nx.nome)}.</p>
+    <div class="ap-acts"><button type="button" class="ap-cta" data-apnext="${nx.id}">Ir para a Parte ${ROM(pi+2)} ›</button><button type="button" class="ap-cta ghost" data-apsum="1">Rever o sumário</button></div>
+  </div></article>`;
+  return `<article class="ap-card ap-c ap-final"><div class="ap-sc">
+    <span class="ap-kick">Fim da apresentação</span>
+    <h2 class="ap-mark sm">Juntos vamos<br>mais longe</h2>${ORN}
+    <p class="ap-pil">Ouvir<i></i>Acolher<i></i>Resolver</p>
+    <p class="ap-lead">${feitos} de ${chs.length} capítulos marcados como aprendidos. ${pi>0?"Agora você conhece a casa por inteiro; nos próximos módulos, aprende cada tarefa.":"Agora você já sabe como ser; nos próximos módulos, aprende como fazer."}</p>
+    <div class="ap-acts"><button type="button" class="ap-cta" data-apsair="1">Ir para os módulos</button><button type="button" class="ap-cta ghost" data-apsum="1">Rever o sumário</button></div>
+  </div></article>`;
+}
+function apSlot(i,cls){ const d=document.createElement("div"); d.className="ap-slot"+(cls?" "+cls:""); d.innerHTML=apSlideHTML(S.ap.deck[i]); return d; }
+function apChrome(){
+  const A=S.ap, sl=A.deck[A.i], n=A.deck.length;
+  const w=document.getElementById("apWhere"); if(w) w.textContent = sl.a ? `Capítulo ${ROM(sl.ci+1)} · ${semNum(sl.a.titulo)}` : ({capa:"Boas-vindas",sumario:"Sumário",final:"Encerramento"})[sl.k]||"";
+  const c=document.getElementById("apCount"); if(c){ const nc=aulasOf(A.mid).length; c.textContent = sl.a ? `Capítulo ${ROM(sl.ci+1)} de ${ROM(nc)}` : ({capa:"Início",sumario:"Sumário",final:"Fim"})[sl.k]||""; }
+  document.querySelectorAll("#apProg .ap-seg").forEach((b,ci)=>{
+    let first=-1,last=-1; A.deck.forEach((x,k)=>{ if(x.ci===ci&&x.a){ if(first<0) first=k; last=k; } });
+    const f = A.i<first?0 : A.i>last?1 : (A.i-first+1)/(last-first+1);
+    b.style.setProperty("--f",f); b.classList.toggle("cur",A.i>=first&&A.i<=last);
+    const a=aulasOf(A.mid)[ci]; b.classList.toggle("done",!!(a&&S.feitos[a.id]));
+  });
+  document.querySelectorAll('#ap [data-apgo="prev"]').forEach(b=>b.disabled=A.i<=0);
+  document.querySelectorAll('#ap .ap-arw[data-apgo="next"],#ap .ap-mini[data-apgo="next"]').forEach(b=>b.disabled=A.i>=n-1);
+}
+function apMedia(){ const sl=S.ap.deck[S.ap.i]; if(sl.k==="video") loadVideo(sl.a.video); if(sl.k==="etapa"&&sl.img) loadImages([{imagem:sl.img}]); }
+function apMount(){
+  const st=document.getElementById("apStage"); if(!st||!S.ap) return;
+  st.querySelectorAll(".ap-slot").forEach(x=>x.remove());
+  st.appendChild(apSlot(S.ap.i,"in0")); apChrome(); apMedia();
+}
+function apRefresh(){
+  const st=document.getElementById("apStage"); if(!st) return render();
+  const s=st.querySelector(".ap-slot:not(.out)"); if(s) s.innerHTML=apSlideHTML(S.ap.deck[S.ap.i]);
+  apChrome(); apMedia();
+}
+function apGo(n){
+  const A=S.ap, st=document.getElementById("apStage"); if(!A||!st||isNaN(n)) return;
+  n=Math.max(0,Math.min(A.deck.length-1,n)); if(n===A.i||A.busy) return;
+  const dir=n>A.i?1:-1; A.i=n; apSave(n);
+  const old=st.querySelector(".ap-slot:not(.out)");
+  if(old) old.querySelectorAll("video").forEach(v=>{ try{ v.pause(); }catch(e){} });
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){ if(old) old.remove(); st.appendChild(apSlot(n,"")); apChrome(); apMedia(); return; }
+  A.busy=true;
+  if(old){ old.className="ap-slot out "+(dir>0?"outN":"outP"); setTimeout(()=>old.remove(),700); }
+  const pane=document.getElementById("apPane"); if(pane){ pane.className="ap-pane"; void pane.offsetWidth; pane.classList.add(dir>0?"swN":"swP"); }
+  st.appendChild(apSlot(n,dir>0?"inN":"inP")); apChrome(); apMedia();
+  setTimeout(()=>{ A.busy=false; },560);
+}
+let apTouch=null;
+document.addEventListener("touchstart",ev=>{ if(S.view.name!=="apres"||ev.touches.length!==1||ev.target.closest("video,iframe,.zoom")){ apTouch=null; return; } apTouch={x:ev.touches[0].clientX,y:ev.touches[0].clientY}; },{passive:true});
+document.addEventListener("touchend",ev=>{ if(!apTouch||S.view.name!=="apres"||!S.ap) return; const t=ev.changedTouches[0], dx=t.clientX-apTouch.x, dy=t.clientY-apTouch.y; apTouch=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5) apGo(S.ap.i+(dx<0?1:-1)); },{passive:true});
+document.addEventListener("keydown",ev=>{
+  if(S.view.name!=="apres"||!S.ap||document.querySelector(".zoom")) return;
+  const tg=ev.target; if(tg&&/^(INPUT|TEXTAREA|SELECT|VIDEO)$/.test(tg.tagName)) return;
+  if(ev.key==="ArrowRight"||ev.key==="PageDown"){ ev.preventDefault(); apGo(S.ap.i+1); }
+  else if(ev.key==="ArrowLeft"||ev.key==="PageUp"){ ev.preventDefault(); apGo(S.ap.i-1); }
+});
 
 /* ---------- Minha conta ---------- */
 function contaHTML(){
@@ -753,6 +1247,7 @@ function editAulaHTML(){
       <div class="field"><label class="lbl" for="at">Nome da opção (botão)</label><input id="at" data-f="titulo" value="${esc(e.titulo||"")}" required placeholder="Ex.: Estoca"></div>
       <div class="field"><label class="lbl" for="ao">Ordem</label><input id="ao" data-f="ordem" inputmode="numeric" value="${esc(e.ordem||"")}"></div>
     </div>
+    <div class="field"><label class="lbl" for="amod">Módulo</label><select id="amod" data-f="modulo_id">${S.modulos.slice().sort((x,y)=>(x.ordem||0)-(y.ordem||0)||x.nome.localeCompare(y.nome)).map(x=>`<option value="${x.id}"${x.id===e.modulo_id?" selected":""}>${esc(x.nome)}</option>`).join("")}</select><span class="hint">Para levar esta aula para outro módulo, escolha aqui e clique em Salvar aula.</span></div>
     <div class="vbox"><span class="lbl">Vídeo explicativo (opcional)</span>
       ${e.video?`${videoHTML(e.video)}<div><button type="button" class="btn sm ghost" data-rmvideo="1">Tirar vídeo</button></div>`:`<p class="hint" style="margin:0">Esta aula ainda não tem vídeo. Envie um arquivo do seu computador ou cole um link.</p>`}
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
@@ -831,20 +1326,28 @@ function openAulaEditor(id, moduloId){
 /* ---------- Eventos ---------- */
 document.addEventListener("click",async ev=>{
   const z=ev.target.closest(".zoom"); if(z){ z.remove(); return; }
+  if(S.view.name==="apres"&&S.ap&&matchMedia("(pointer:coarse)").matches){ const cd=ev.target.closest(".ap-card");
+    if(cd&&!ev.target.closest("button,a,img,video,iframe,input,select,textarea,.org")){ const r=cd.getBoundingClientRect(); return apGo(S.ap.i+((ev.clientX-r.left)>r.width*0.3?1:-1)); } }
   const t=ev.target.closest("button,[data-zoom],tr.click"); if(!t) return;
   const d=t.dataset;
   if(d.zoom&&t.src){ const o=document.createElement("div"); o.className="zoom"; const im=document.createElement("img"); im.src=t.src; im.alt=t.alt||""; o.appendChild(im); document.body.appendChild(o); return; }
   if(d.go){ if(d.go==="home"){ S.q=""; }
     if(d.go==="usuarios"){ go({name:"usuarios"}); await loadUsers(); return render(); }
     return go({name:d.go}); }
-  if(d.mod) return go({name:"modulo",id:d.mod});
+  if(d.apgo!==undefined&&S.ap){ const A=S.ap; if(d.apfs) apFS(true); return apGo(d.apgo==="next"?A.i+1:d.apgo==="prev"?A.i-1:+d.apgo); }
+  if(d.apsum&&S.ap) return apGo(1);
+  if(d.apcap!==undefined&&S.ap) return apGo(S.ap.deck.findIndex(x=>x.k==="cap"&&x.ci===+d.apcap));
+  if(d.apsair){ S.ap=null; return go({name:"home"}); }
+  if(d.apnext) return apOpen(d.apnext);
+  if(d.apedit&&S.ap){ const sl=S.ap.deck[S.ap.i]; if(sl.a) return openAulaEditor(sl.a.id); S.edit=Object.assign({},modById(S.ap.mid)); return go({name:"editModulo",id:S.ap.mid}); }
+  if(d.mod){ const mm=modById(d.mod); if(isApres(mm)&&!d.ler) return apOpen(mm.id); return go({name:"modulo",id:d.mod}); }
   if(d.idx){ S.idx=!S.idx; return render(); }
   if(d.aula){ S.idx=false; return go({name:"aula",id:d.aula}); }
   if(d.done||d.undone){
     const id=d.done||d.undone;
     if(d.done){ const r=await S.sb.from("academy_progresso").insert({usuario_id:S.user.id,aula_id:id}); if(r.error&&!/duplicate/i.test(r.error.message)) return toast(errMsg(r.error)); S.feitos[id]=new Date().toISOString(); toast("Registrado"); }
     else { const r=await S.sb.from("academy_progresso").delete().eq("usuario_id",S.user.id).eq("aula_id",id); if(r.error) return toast(errMsg(r.error)); delete S.feitos[id]; }
-    return render(); }
+    return S.view.name==="apres"?apRefresh():render(); }
   if(d.sair){ await S.sb.auth.signOut(); location.reload(); return; }
   if(d.newuser){ S.edit={id:null,nome:"",usuario:"",admin:false,editor:false,ativo:true,acessos:new Set()}; return go({name:"editUser"}); }
   if(d.user){ const u=S.users.find(x=>x.id===d.user); S.edit=Object.assign({},u,{acessos:new Set(S.userAcessos[u.id]||[])}); return go({name:"editUser"}); }
