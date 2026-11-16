@@ -478,6 +478,7 @@ html.ap-on,html.ap-on body{overflow:hidden}
 "use strict";
 const CFG = window.SAINTACADEMY || {};
 const DOMINIO = "@saintgermain.academy";
+const NO_CENTER = (()=>{ try{ return window.parent!==window && window.parent.location.origin===location.origin; }catch(_){ return false; } })();
 const MAILER = "https://script.google.com/macros/s/AKfycbwZkxJmo1GvlrCaIik8hIcyn8B5ZZqFa_ylJLM8QNfoGr99-Bct57RBseYUxvnLTrog/exec"; // servidor de e-mail (Esqueci minha senha)
 const semColunaEmail = err => /email/i.test((err&&err.message)||"") && /column|coluna|schema cache/i.test((err&&err.message)||""); // banco ainda sem a coluna de e-mail
 const EMAIL_OK = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
@@ -1114,7 +1115,7 @@ function usuariosHTML(){
   const mods=S.modulos.slice().sort((a,b)=>(a.ordem||0)-(b.ordem||0));
   return `<section class="panel"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end">
       <div><span class="lbl">Administração</span><h1 style="margin-top:6px">Usuários</h1></div>
-      <button type="button" class="btn solid" data-newuser="1">Criar usuário</button></div>
+      ${NO_CENTER?`<p class="note" style="max-width:420px">Novas pessoas são cadastradas em Saint Center › Pessoas e acessos. O acesso ao SaintAcademy e os módulos são criados juntos, por lá.</p>`:`<button type="button" class="btn solid" data-newuser="1">Criar usuário</button>`}</div>
     ${S.users.length?`<div class="tscroll"><table class="list"><thead><tr><th>Nome</th><th>Usuário</th><th>E-mail</th><th>Perfil</th><th>Módulos liberados</th><th>Aprendidas</th></tr></thead><tbody>
       ${S.users.map(u=>{ const ac=S.userAcessos[u.id]||new Set(); const nomes=mods.filter(m=>ac.has(m.id)).map(m=>esc(m.nome));
         return `<tr class="click" data-user="${u.id}"><td>${esc(u.nome)}${!u.ativo?` <span class="chip">Desativado</span>`:""}</td><td>${esc(u.usuario)}</td>
@@ -1192,6 +1193,61 @@ async function saveUser(){
   }catch(err){ toast(errMsg(err)); }
   S.busy=false;
 }
+
+/* ---------- Cadastro único: o Saint Center cria e atualiza os usuários por aqui ---------- */
+window.SA_API = {
+  pronto: () => !!(S.sb && S.perfil && isAdmin()),
+  async modulos(){
+    const r=await S.sb.from("academy_modulos").select("*"); if(r.error) throw r.error;
+    return (r.data||[]).sort((a,b)=>(a.ordem||0)-(b.ordem||0)||a.nome.localeCompare(b.nome))
+      .map(m=>({id:m.id,nome:m.nome,publicado:!!m.publicado,padrao:isApres(m)}));
+  },
+  async buscar(usuario){
+    const u=normUser(usuario); if(!u) return null;
+    const p=await S.sb.from("academy_perfis").select("*").eq("usuario",u).maybeSingle(); if(p.error) throw p.error;
+    if(!p.data) return null;
+    const a=await S.sb.from("academy_acessos").select("modulo_id").eq("usuario_id",p.data.id); if(a.error) throw a.error;
+    return {id:p.data.id, usuario:p.data.usuario, coordenacao:!!p.data.coordenacao, ativo:!!p.data.ativo, admin:!!p.data.admin, editor:!!p.data.editor, modulos:(a.data||[]).map(x=>x.modulo_id)};
+  },
+  async sincronizar(d){
+    if(!window.SA_API.pronto()) throw new Error("Entre no SaintAcademy como administradora e tente de novo.");
+    const usuario=normUser(d.usuario), nivel=d.nivel||"", email=String(d.email||"").trim().toLowerCase(), senha=d.senha||"";
+    const ex=await window.SA_API.buscar(usuario);
+    let res;
+    if(!ex){
+      if(!nivel) return {acao:"nenhuma"};
+      if(senha.length<6) return {acao:"sem-senha"};
+      const mods=Array.isArray(d.modulos)?d.modulos:(await window.SA_API.modulos()).filter(m=>m.padrao).map(m=>m.id);
+      const tmp=window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,storageKey:"saintacademy-tmp"}});
+      const su=await tmp.auth.signUp({email:usuario+DOMINIO,password:senha});
+      if(su.error) throw su.error;
+      if(!su.data.user || (su.data.user.identities && su.data.user.identities.length===0)) throw new Error("Este login já existe no SaintAcademy com outro cadastro.");
+      try{ await tmp.auth.signOut(); }catch(_){}
+      const r=await S.sb.rpc("academy_registrar_usuario",{p_id:su.data.user.id,p_nome:d.nome,p_usuario:usuario,p_admin:nivel==="admin",p_editor:nivel==="admin",p_modulos:mods});
+      if(r.error) throw r.error;
+      if(EMAIL_OK(email)){ const em=await S.sb.from("academy_perfis").update({email}).eq("id",su.data.user.id); if(em.error && !semColunaEmail(em.error)) throw em.error; }
+      res={acao:"criado"};
+    } else if(ex.coordenacao){
+      return {acao:"protegido"};
+    } else {
+      const upd={nome:d.nome, ativo:!!d.ativo && !!nivel};
+      if(nivel){ upd.admin = nivel==="admin"; if(nivel==="admin") upd.editor=true; }
+      if(EMAIL_OK(email)) upd.email=email;
+      let u=await S.sb.from("academy_perfis").update(upd).eq("id",ex.id);
+      if(u.error && semColunaEmail(u.error)){ delete upd.email; u=await S.sb.from("academy_perfis").update(upd).eq("id",ex.id); }
+      if(u.error) throw u.error;
+      if(nivel && Array.isArray(d.modulos)){
+        const add=d.modulos.filter(id=>!ex.modulos.includes(id)), rem=ex.modulos.filter(id=>!d.modulos.includes(id));
+        if(add.length){ const r=await S.sb.from("academy_acessos").insert(add.map(id=>({usuario_id:ex.id,modulo_id:id}))); if(r.error) throw r.error; }
+        if(rem.length){ const r=await S.sb.from("academy_acessos").delete().eq("usuario_id",ex.id).in("modulo_id",rem); if(r.error) throw r.error; }
+      }
+      if(senha){ if(senha.length<6) throw new Error("A senha precisa ter pelo menos 6 caracteres"); const r=await S.sb.rpc("academy_trocar_senha",{p_id:ex.id,p_senha:senha}); if(r.error) throw r.error; }
+      res={acao: nivel?"atualizado":"desativado"};
+    }
+    try{ if(S.view && ["usuarios","editUser"].includes(S.view.name)){ await loadUsers(); go({name:"usuarios"}); } }catch(_){}
+    return res;
+  }
+};
 
 /* ---------- Conteúdo (editores) ---------- */
 function conteudoHTML(){
