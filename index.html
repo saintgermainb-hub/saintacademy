@@ -1115,7 +1115,7 @@ function usuariosHTML(){
   const mods=S.modulos.slice().sort((a,b)=>(a.ordem||0)-(b.ordem||0));
   return `<section class="panel"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end">
       <div><span class="lbl">Administração</span><h1 style="margin-top:6px">Usuários</h1></div>
-      ${NO_CENTER?`<p class="note" style="max-width:420px">Novas pessoas são cadastradas em Saint Center › Pessoas e acessos. O acesso ao SaintAcademy e os módulos são criados juntos, por lá.</p>`:`<button type="button" class="btn solid" data-newuser="1">Criar usuário</button>`}</div>
+      <button type="button" class="btn solid" data-newuser="1">Criar usuário</button></div>
     ${S.users.length?`<div class="tscroll"><table class="list"><thead><tr><th>Nome</th><th>Usuário</th><th>E-mail</th><th>Perfil</th><th>Módulos liberados</th><th>Aprendidas</th></tr></thead><tbody>
       ${S.users.map(u=>{ const ac=S.userAcessos[u.id]||new Set(); const nomes=mods.filter(m=>ac.has(m.id)).map(m=>esc(m.nome));
         return `<tr class="click" data-user="${u.id}"><td>${esc(u.nome)}${!u.ativo?` <span class="chip">Desativado</span>`:""}</td><td>${esc(u.usuario)}</td>
