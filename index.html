@@ -563,8 +563,35 @@ async function start(){
   }
   S.sb = window.__SA_CLIENT__ || window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY, {auth:{persistSession:true,autoRefreshToken:true,storageKey:"saintacademy-auth"}});
   const { data } = await S.sb.auth.getSession();
+  const sc = scUsuario();
+  if(data && data.session && sc && (data.session.user.email||"").toLowerCase() !== normUser(sc.login)+DOMINIO){ await S.sb.auth.signOut(); data.session = null; } // outra pessoa entrou no Saint Center
   if(data && data.session){ S.user=data.session.user; await loadAll(); }
+  else if(sc && await scEntrarAcademy(sc)){ await loadAll(); }
   else await showLogin();
+}
+
+/* ---------- Saint Center · acesso único ----------
+   Quem entrou no Saint Center e tem o SaintAcademy liberado em "Pessoas e acessos" entra direto,
+   sem digitar usuário e senha de novo. O servidor confirma o acesso no Saint Center antes de liberar. */
+function scUsuario(){
+  try{
+    const t=localStorage.getItem("sc-token")||"", u=JSON.parse(localStorage.getItem("sc-user")||"null");
+    if(t.indexOf("SC.")!==0 || !u || !u.login || !u.perms || !u.perms.saintacademy) return null;
+    return { token:t, login:u.login };
+  }catch(_){ return null; }
+}
+async function scEntrarAcademy(sc){
+  try{
+    app.innerHTML=`<div class="loading" style="text-align:center">Entrando pelo Saint Center</div>`;
+    const r=await fetch(MAILER,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({acao:"chamar",fn:"academySSO",args:[sc.token]})});
+    const j=await r.json(); if(!j.ok || !j.resultado || !j.resultado.senha) return false;
+    const si=await S.sb.auth.signInWithPassword({email:normUser(j.resultado.usuario||sc.login)+DOMINIO,password:j.resultado.senha});
+    if(si.error) return false;
+    const nova=Array.from(crypto.getRandomValues(new Uint8Array(24)),b=>b.toString(16).padStart(2,"0")).join("");
+    await S.sb.auth.updateUser({password:nova}); // a senha temporária do acesso único não fica valendo
+    try{ await S.sb.rpc("academy_senha_definida"); }catch(_){}
+    S.user=si.data.user; return true;
+  }catch(_){ return false; }
 }
 
 async function showLogin(msg){
